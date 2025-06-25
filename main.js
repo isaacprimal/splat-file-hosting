@@ -654,7 +654,7 @@ async function main(sceneConfig) {
 		scene=sceneConfig.scene;
 	}
 	if("frameRate" in sceneConfig){
-		mframerate=1000.0/sceneConfig.frameRate;
+		mframerate=1000.0/sceneConfig.framerate;
 	}
 	if("frameDuration" in sceneConfig){
       mframerate=sceneConfig.frameDuration;
@@ -692,7 +692,7 @@ async function main(sceneConfig) {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
     } catch (err) {}
-	const url = "splats/frame_00001.splat";
+    const url = params.get("url") ? new URL(params.get("url"), "https://huggingface.co/cakewalk/splat-data/resolve/main/") : "splats/1.splat";
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
@@ -724,8 +724,7 @@ async function main(sceneConfig) {
     const load_frame = () => {
 		if (texCache[mframe-1]==null ){
 			texCache[mframe-1] = 0;
-			let frameNumber = mframe.toString().padStart(5, '0');
-			let url="splats/frame_"+frameNumber+".splat";
+			let url="splats/"+mframe+".splat";
 			let blob=fetch(url).then((response) => response.blob()).then((blob) => selectFileWithCache(blob,mframe));
 			// console.log("loading frame "+mframe+" from web");
 		} else if (texCache[mframe-1]!=0 ){
@@ -736,41 +735,12 @@ async function main(sceneConfig) {
 		}
 		
 		if (mLoadedFrames==mNumFrames && !mfullyloaded) {
-			console.log("All frames loaded! Starting animation...");
+			console.log("All frames loaded!");
 			mfullyloaded=true;
-			playMovie=true; // Ensure animation starts
 		}
     };
 
-    const preloadAllFrames = () => {
-        console.log("Starting preload of all", mNumFrames, "frames...");
-        for (let i = 1; i <= mNumFrames; i++) {
-            if (texCache[i-1] === null) {
-                texCache[i-1] = 0; // Mark as loading
-                let frameNumber = i.toString().padStart(5, '0');
-                let url = "splats/frame_" + frameNumber + ".splat";
-                
-                fetch(url)
-                    .then((response) => {
-                        if (!response.ok) {
-                            console.warn(`Failed to load frame ${i}: ${response.status}`);
-                            return null;
-                        }
-                        return response.blob();
-                    })
-                    .then((blob) => {
-                        if (blob) {
-                            selectFileWithCache(blob, i);
-                            console.log(`Frame ${i}/${mNumFrames} loaded (${mLoadedFrames} total)`);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(`Error loading frame ${i}:`, error);
-                        texCache[i-1] = null; // Reset to retry later
-                    });
-            }
-        }
-    };
+
 
     const downsample =
         splatData.length / rowLength > 500000 ? 1 : 1 / devicePixelRatio;
@@ -926,10 +896,7 @@ async function main(sceneConfig) {
             gl.bufferData(gl.ARRAY_BUFFER, depthIndex, gl.DYNAMIC_DRAW);
             vertexCount = e.data.vertexCount;
             
-            // Hide the spinner immediately when we have vertices to render
-            if (vertexCount > 0) {
-                document.getElementById("spinner").style.display = "none";
-            }
+
         }
     };
 
@@ -944,7 +911,6 @@ async function main(sceneConfig) {
         // Now only responds to scene.json configuration
 		if ([' '].includes(e.key)){
 			playMovie=!playMovie;
-			console.log("Animation", playMovie ? "STARTED" : "PAUSED");
 		}
 		if (['z'].includes(e.key)){
 			pos=invert4(viewMatrix).slice(12,15);
@@ -1397,21 +1363,18 @@ async function main(sceneConfig) {
 
 		if(mfirstframe){
 			mfirstframe=false;
-			// Start aggressive preloading of all frames
-			preloadAllFrames();
 			advance_frame();
-			// Initialize animation timing
-			lastmFrame = now;
 		}
 		
 		if(mfullyloaded) {
-			if ((now - lastmFrame) > mframerate && playMovie) {
+			if ((now - lastmFrame)>mframerate && playMovie ) {
 				advance_frame();
 				lastmFrame = now;
 			}
 		} else {
-			// During loading, advance frames as they become available
-			if(texCache[mframe-1] != null && texCache[mframe-1] != 0){
+			if(texCache[mframe-1]==null || texCache[mframe-1]==0){
+				//waiting for frame
+			} else {
 				advance_frame();
 			}
 		}
@@ -1430,7 +1393,6 @@ async function main(sceneConfig) {
             gl.clear(gl.COLOR_BUFFER_BIT);
             gl.drawArraysInstanced(gl.TRIANGLE_FAN, 0, 4, vertexCount);
         } else {
-            console.log("DEBUG: Still waiting for vertices. vertexCount =", vertexCount, "mLoadedFrames =", mLoadedFrames);
             gl.clear(gl.COLOR_BUFFER_BIT);
             document.getElementById("spinner").style.display = "";
             start = Date.now() + 2000;
@@ -1441,17 +1403,10 @@ async function main(sceneConfig) {
         } else {
             document.getElementById("progress").style.display = "none";
         }
-		if(mfullyloaded) {
-			let status = Math.round(avgFps) + " fps";
-			if (playMovie) {
-				status += " - Playing Frame " + mframe + "/" + mNumFrames;
-			} else {
-				status += " - Paused Frame " + mframe + "/" + mNumFrames;
-			}
-			fps.innerText = status;
-		} else {
-			fps.innerText = "Loading " + mframe + "/" + mNumFrames + " (" + mLoadedFrames + " loaded)";
-		}
+		if(mfullyloaded)
+			fps.innerText = Math.round(avgFps) + " fps";
+		else
+			fps.innerText = "Loading " + mframe + "/" + mNumFrames;
         if (isNaN(currentCameraIndex)){
             camid.innerText = "";
         }
