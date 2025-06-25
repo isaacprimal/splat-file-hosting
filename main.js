@@ -280,9 +280,34 @@ function createWorker(self) {
     }
 
     function runSort(viewProj) {
-        if (!buffer) return;
-        const f_buffer = new Float32Array(buffer);
-        if (lastVertexCount == vertexCount) {
+        if (!buffer) {
+            console.log("DEBUG: runSort called but no buffer available");
+            return;
+        }
+        
+        console.log("DEBUG: runSort called with buffer size:", buffer.byteLength);
+        
+        // Ensure buffer length is a multiple of 4 for Float32Array
+        let alignedBuffer = buffer;
+        const remainder = buffer.byteLength % 4;
+        if (remainder !== 0) {
+            console.log("DEBUG: Buffer alignment needed! Aligning from", buffer.byteLength, "to", buffer.byteLength - remainder, "bytes");
+            alignedBuffer = buffer.slice(0, buffer.byteLength - remainder);
+        }
+        
+        let f_buffer;
+        try {
+            f_buffer = new Float32Array(alignedBuffer);
+            console.log("DEBUG: Successfully created Float32Array with", f_buffer.length, "elements");
+        } catch (error) {
+            console.error("DEBUG: Failed to create Float32Array:", error);
+            return;
+        }
+        
+        // Update vertex count based on aligned buffer
+        const alignedVertexCount = Math.floor(alignedBuffer.byteLength / rowLength);
+        
+        if (lastVertexCount == alignedVertexCount) {
             let dot =
                 lastProj[2] * viewProj[2] +
                 lastProj[6] * viewProj[6] +
@@ -292,14 +317,14 @@ function createWorker(self) {
             }
         } else {
             generateTexture();
-            lastVertexCount = vertexCount;
+            lastVertexCount = alignedVertexCount;
         }
 
         //console.time("sort");
         let maxDepth = -Infinity;
         let minDepth = Infinity;
-        let sizeList = new Int32Array(vertexCount);
-        for (let i = 0; i < vertexCount; i++) {
+        let sizeList = new Int32Array(alignedVertexCount);
+        for (let i = 0; i < alignedVertexCount; i++) {
             let depth =
                 ((viewProj[2] * f_buffer[8 * i + 0] +
                     viewProj[6] * f_buffer[8 * i + 1] +
@@ -314,15 +339,15 @@ function createWorker(self) {
         // This is a 16 bit single-pass counting sort
         let depthInv = (256 * 256) / (maxDepth - minDepth);
         let counts0 = new Uint32Array(256 * 256);
-        for (let i = 0; i < vertexCount; i++) {
+        for (let i = 0; i < alignedVertexCount; i++) {
             sizeList[i] = ((sizeList[i] - minDepth) * depthInv) | 0;
             counts0[sizeList[i]]++;
         }
         let starts0 = new Uint32Array(256 * 256);
         for (let i = 1; i < 256 * 256; i++)
             starts0[i] = starts0[i - 1] + counts0[i - 1];
-        depthIndex = new Uint32Array(vertexCount);
-        for (let i = 0; i < vertexCount; i++) {
+        depthIndex = new Uint32Array(alignedVertexCount);
+        for (let i = 0; i < alignedVertexCount; i++) {
             depthIndex[starts0[sizeList[i]]++] = i;
 			//depthIndex[i]=i;
 		}
@@ -330,7 +355,7 @@ function createWorker(self) {
         //console.timeEnd("sort");
 
         lastProj = viewProj;
-        self.postMessage({ depthIndex, viewProj, vertexCount }, [
+        self.postMessage({ depthIndex, viewProj, vertexCount: alignedVertexCount }, [
             depthIndex.buffer,
         ]);
     }
