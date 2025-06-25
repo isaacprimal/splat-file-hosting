@@ -601,7 +601,6 @@ let center = [.05,-2.15,4.6];
 //let rotOff = .3;
 
 let viewMatrix = defaultViewMatrix;
-let pauseRender = false;
 
 //*********************************************************
 const headerVersion=1;
@@ -734,6 +733,7 @@ async function main(sceneConfig) {
 		if (mLoadedFrames==mNumFrames && !mfullyloaded) {
 			console.log("All frames loaded!");
 			mfullyloaded=true;
+			lastmFrame = now;  // Reset timing when all frames loaded
 		}
     };
 
@@ -844,9 +844,18 @@ async function main(sceneConfig) {
 
     worker.onmessage = (e) => {
         if (e.data.buffer) {
-            //pass
+            splatData = new Uint8Array(e.data.buffer);
+            const blob = new Blob([splatData.buffer], {
+                type: "application/octet-stream",
+            });
+
+            const link = document.createElement("a");
+            link.download = "model.splat";
+            link.href = URL.createObjectURL(blob);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         } else if (e.data.texdata) {
-			pauseRender = true;
             const { texdata, texwidth, texheight } = e.data;
             // console.log(texdata)
             gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -876,13 +885,16 @@ async function main(sceneConfig) {
             );
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
-			
         } else if (e.data.depthIndex) {
             const { depthIndex, viewProj } = e.data;
             gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, depthIndex, gl.DYNAMIC_DRAW);
             vertexCount = e.data.vertexCount;
-			pauseRender = false;
+            
+            // Hide the spinner immediately when we have vertices to render
+            if (vertexCount > 0) {
+                document.getElementById("spinner").style.display = "none";
+            }
         }
     };
 
@@ -1361,6 +1373,7 @@ async function main(sceneConfig) {
 		if(mfirstframe){
 			mfirstframe=false;
 			advance_frame();
+			lastmFrame = now;  // Initialize timing
 		}
 		
 		if(mfullyloaded) {
@@ -1376,11 +1389,7 @@ async function main(sceneConfig) {
 			}
 		}
 		
-		if (pauseRender) {
-			lastFrame = now;
-			requestAnimationFrame(frame);
-			return;
-		}
+
 //*********************************************************
 		worker.postMessage({ view: viewProj });
 
