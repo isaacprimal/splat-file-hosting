@@ -1,11 +1,12 @@
-﻿{
+{
   "ver": "1.0",
   "owner": "Primal Sphere",
   "scene": "Ripley",
-  "framerate": 60,
+  "frameRate": 60,
+  "frameDuration": 16.67,
   "numFrames": 299,
   "carouselOnLoad": false,
   "center": [0, 0, 0],
-  "rotationOffset": 00,
+  "rotationOffset": 0,
   "viewMatrix": [0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 4, 1]
-} 
+}
