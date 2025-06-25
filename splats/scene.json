@@ -6,6 +6,6 @@
   "numFrames": 299,
   "carouselOnLoad": true,
   "center": [0, 0, 0],
-  "rotationOffset": 90,
+  "rotationOffset": 00,
   "viewMatrix": [0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 4, 1]
 } 
