@@ -1,4 +1,4 @@
-﻿let cameras = [
+let cameras = [
     {
         id: 0,
         img_name: "00001",
@@ -629,7 +629,7 @@ async function loadConfig() {
         // Return a default configuration if scene.json doesn't exist
         return {
             ver: "1.0",
-            owner: "Primal Sphere",
+            owner: "TechniSync",
             scene: "Remote Splats",
             frameRate: 30,
             numFrames: 299,
@@ -687,8 +687,8 @@ async function main(sceneConfig) {
 		carousel=sceneConfig.carouselOnLoad;
 	}
 	
-	console.log("Primal Sphere Frame Viewer");
-	console.log("(c)2024 Primal Sphere Corporation");
+	console.log("Technisync Frame Viewer");
+	console.log("(c)2024 TechniSync Corporation");
 	console.log("scene: "+scene+" : "+owner);
 	
     const params = new URLSearchParams(location.search);
@@ -735,10 +735,10 @@ async function main(sceneConfig) {
 			let blob=fetch(url).then((response) => response.blob()).then((blob) => selectFileWithCache(blob,mframe));
 			// console.log("loading frame "+mframe+" from web");
 		} else if (texCache[mframe-1]!=0 ){
-			//console.log("loading frame "+mframe+" from cache");
+			console.log("DEBUG: Loading frame "+mframe+" from cache");
 			selectFile(texCache[mframe-1]);
 		} else {
-			//console.log("Frame "+mframe+" still loading");
+			console.log("DEBUG: Frame "+mframe+" still loading");
 		}
 		
 		if (mLoadedFrames==mNumFrames && !mfullyloaded) {
@@ -883,9 +883,12 @@ async function main(sceneConfig) {
     resize();
 
     worker.onmessage = (e) => {
+        console.log("DEBUG: Worker message received:", Object.keys(e.data));
         if (e.data.buffer) {
+            console.log("DEBUG: Worker buffer message");
             //pass
         } else if (e.data.texdata) {
+            console.log("DEBUG: Worker texture data received");
 			pauseRender = true;
             const { texdata, texwidth, texheight } = e.data;
             // console.log(texdata)
@@ -918,10 +921,12 @@ async function main(sceneConfig) {
             gl.bindTexture(gl.TEXTURE_2D, texture);
 			
         } else if (e.data.depthIndex) {
+            console.log("DEBUG: Worker depth index received! vertexCount:", e.data.vertexCount);
             const { depthIndex, viewProj } = e.data;
             gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, depthIndex, gl.DYNAMIC_DRAW);
             vertexCount = e.data.vertexCount;
+            console.log("DEBUG: Set vertexCount to:", vertexCount);
 			pauseRender = false;
         }
     };
@@ -1432,6 +1437,7 @@ async function main(sceneConfig) {
             gl.clear(gl.COLOR_BUFFER_BIT);
             gl.drawArraysInstanced(gl.TRIANGLE_FAN, 0, 4, vertexCount);
         } else {
+            console.log("DEBUG: Still waiting for vertices. vertexCount =", vertexCount, "mLoadedFrames =", mLoadedFrames);
             gl.clear(gl.COLOR_BUFFER_BIT);
             document.getElementById("spinner").style.display = "";
             start = Date.now() + 2000;
@@ -1456,9 +1462,11 @@ async function main(sceneConfig) {
     frame();
 
 	const selectFileWithCache = (blob,frameid) => {
+		console.log("DEBUG: Processing frame", frameid, "blob size:", blob.size);
 		selectFile(blob);
 		texCache[frameid-1]=blob;
 		mLoadedFrames=mLoadedFrames+1;
+		console.log("DEBUG: mLoadedFrames now:", mLoadedFrames);
 	}
 
     const selectFile = (file) => {
@@ -1493,6 +1501,7 @@ async function main(sceneConfig) {
                     // ply file magic header means it should be handled differently
                     worker.postMessage({ ply: splatData.buffer });
                 } else {
+                    console.log("DEBUG: Sending splat data to worker. Length:", splatData.length, "Vertices:", Math.floor(splatData.length / rowLength));
                     worker.postMessage({
                         buffer: splatData.buffer,
                         vertexCount: Math.floor(splatData.length / rowLength),
