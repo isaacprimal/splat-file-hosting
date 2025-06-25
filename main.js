@@ -213,8 +213,21 @@ function createWorker(self) {
 
     function generateTexture() {
         if (!buffer) return;
-        const f_buffer = new Float32Array(buffer);
-        const u_buffer = new Uint8Array(buffer);
+        
+        // Ensure buffer length is a multiple of 4 for Float32Array
+        let alignedBuffer = buffer;
+        const remainder = buffer.byteLength % 4;
+        if (remainder !== 0) {
+            console.log("DEBUG: generateTexture - Buffer alignment needed! Aligning from", buffer.byteLength, "to", buffer.byteLength - remainder, "bytes");
+            alignedBuffer = buffer.slice(0, buffer.byteLength - remainder);
+        }
+        
+        const f_buffer = new Float32Array(alignedBuffer);
+        const u_buffer = new Uint8Array(alignedBuffer);
+        
+        // Update vertex count to use aligned buffer
+        vertexCount = Math.floor(alignedBuffer.byteLength / rowLength);
+        console.log("DEBUG: generateTexture - Using vertexCount:", vertexCount);
 
         var texwidth = 1024 * 2; // Set to your desired width
         var texheight = Math.ceil((2 * vertexCount) / texwidth); // Set to your desired height
@@ -310,6 +323,10 @@ function createWorker(self) {
         
         // Update vertex count based on aligned buffer
         const alignedVertexCount = Math.floor(alignedBuffer.byteLength / rowLength);
+        
+        // Update global buffer to use aligned version
+        buffer = alignedBuffer;
+        vertexCount = alignedVertexCount;
         
         if (lastVertexCount == alignedVertexCount) {
             let dot =
@@ -1504,6 +1521,17 @@ async function main(sceneConfig) {
 		texCache[frameid-1]=blob;
 		mLoadedFrames=mLoadedFrames+1;
 		console.log("DEBUG: mLoadedFrames now:", mLoadedFrames);
+		
+		// Force processing of the first frame to ensure worker starts
+		if (frameid === 1 && vertexCount === 0) {
+			console.log("DEBUG: First frame loaded, ensuring worker processes it");
+			setTimeout(() => {
+				if (vertexCount === 0) {
+					console.log("DEBUG: Forcing worker to process frame 1");
+					worker.postMessage({ view: multiply4(projectionMatrix, viewMatrix) });
+				}
+			}, 100);
+		}
 	}
 
     const selectFile = (file) => {
@@ -1536,6 +1564,7 @@ async function main(sceneConfig) {
                     splatData[3] == 10
                 ) {
                     // ply file magic header means it should be handled differently
+                    console.log("DEBUG: Processing PLY file");
                     worker.postMessage({ ply: splatData.buffer });
                 } else {
                     console.log("DEBUG: Sending splat data to worker. Length:", splatData.length, "Vertices:", Math.floor(splatData.length / rowLength));
@@ -1543,6 +1572,9 @@ async function main(sceneConfig) {
                         buffer: splatData.buffer,
                         vertexCount: Math.floor(splatData.length / rowLength),
                     });
+                    // Immediately trigger sorting to start rendering
+                    console.log("DEBUG: Triggering initial sort");
+                    worker.postMessage({ view: multiply4(projectionMatrix, viewMatrix) });
                 }
             };
             fr.readAsArrayBuffer(file);
