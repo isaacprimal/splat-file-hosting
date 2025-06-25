@@ -1,23 +1,27 @@
-let cameras = [
-    {
-        id: 0,
-        img_name: "00001",
-        width: 1959,
-        height: 1090,
-        position: [
-            -3.0089893469241797, -0.11086489695181866, -3.7527640949141428,
-        ],
-        rotation: [
-            [0.876134201218856, 0.06925962026449776, 0.47706599800804744],
-            [-0.04747421839895102, 0.9972110940209488, -0.057586739349882114],
-            [-0.4797239414934443, 0.027805376500959853, 0.8769787916452908],
-        ],
-        fy: 1164.6601287484507,
-        fx: 1159.5880733038064,
-    }
-];
+// Global variables - will be set from scene.json
+let cameras = [];
+let camera = null; // Will be initialized from scene.json
 
-let camera = cameras[0];
+// Scene configuration variables
+let sceneBaseUrl = "./splats/"; // Default, can be overridden by scene.json
+let sceneFramePrefix = "frame_"; // Default, can be overridden by scene.json
+let sceneFrameExtension = ".splat"; // Default, can be overridden by scene.json
+
+// Global variables used throughout the application
+let viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 4, 1]; // Default view matrix
+let center = [0, 0, 0]; // Scene center
+let rotOff = 0; // Rotation offset
+let mframerate = 1000/30; // Default 30 FPS
+let mNumFrames = 299; // Default number of frames
+let mframe = 1; // Current frame
+let mLoadedFrames = 0; // Number of loaded frames
+let mfullyloaded = false; // All frames loaded flag
+let mfirstframe = true; // First frame flag
+let lastmFrame = 0; // Last frame time
+let playMovie = false; // Movie playing flag
+let pauseRender = false; // Pause rendering flag
+let texCache = []; // Texture cache
+let headerVersion = "1.0"; // Expected header version
 
 function getProjectionMatrix(fx, fy, width, height) {
     const znear = 0.2;
@@ -621,25 +625,8 @@ void main () {
 `.trim();
 
 let defaultViewMatrix =  [0.01987280745947854, -0.9868683279023592, -0.1596745906739603, 0, 0.920514659592776, -0.05602180215258631, 0.380018840530592, -0, -0.38246553015987117, -0.15479111121820432, 0.907832490124456, 0, -0.0465918264274564, -0.35097902909350737, 0.1532751212774561, 0.9999999999999969];
-let rotOff = 1.0;
-let center = [.05,-2.15,4.6];
-//let rotOff = .3;
 
-let viewMatrix = defaultViewMatrix;
-let pauseRender = false;
-
-//*********************************************************
-const headerVersion=1;
-let mframe=1;
-let lastmFrame = 0;
-let mfullyloaded = false;
-let mfirstframe = true;
-let mLoadedFrames = 0;
-let mframerate = 33.3667;
-let mNumFrames=60;
-let playMovie=true;
-let texCache=null;
-//*********************************************************
+// REMOVED: Duplicate variable declarations - now handled at top of file
 
 async function loadConfig() {
     try {
@@ -691,14 +678,14 @@ async function main(sceneConfig) {
 	if("viewMatrix" in sceneConfig){
 		viewMatrix=sceneConfig.viewMatrix;
 		if (viewMatrix.length != 16) {
-			logging.error('viewMatrix must have 16 elements');
+			console.error('viewMatrix must have 16 elements');
 			return;
 		}
 	}
 	if("center" in sceneConfig){
 		center=sceneConfig.center;
 		if (center.length != 3) {
-			logging.error('center must have 3 elements');
+			console.error('center must have 3 elements');
 			return;
 		}
 	}
@@ -712,16 +699,47 @@ async function main(sceneConfig) {
 		carousel=sceneConfig.carouselOnLoad;
 	}
 	
+	// NEW: Configure file loading paths from scene.json
+	if("baseUrl" in sceneConfig){
+		sceneBaseUrl=sceneConfig.baseUrl;
+		if (!sceneBaseUrl.endsWith('/')) {
+			sceneBaseUrl += '/';
+		}
+	}
+	if("framePrefix" in sceneConfig){
+		sceneFramePrefix=sceneConfig.framePrefix;
+	}
+	if("frameExtension" in sceneConfig){
+		sceneFrameExtension=sceneConfig.frameExtension;
+	}
+	
+	// NEW: Configure camera from scene.json
+	if("camera" in sceneConfig){
+		cameras = [sceneConfig.camera];
+		camera = cameras[0];
+	} else {
+		// Default camera if not specified
+		camera = {
+			id: 0,
+			img_name: "00001",
+			width: 1920,
+			height: 1080,
+			position: [0, 0, 4],
+			rotation: [[1,0,0],[0,1,0],[0,0,1]],
+			fy: 1000,
+			fx: 1000,
+		};
+		cameras = [camera];
+	}
+	
 	console.log("Technisync Frame Viewer");
 	console.log("(c)2024 TechniSync Corporation");
 	console.log("scene: "+scene+" : "+owner);
+	console.log("Loading from:", sceneBaseUrl);
 	
-    const params = new URLSearchParams(location.search);
-    try {
-        viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
-        carousel = false;
-    } catch (err) {}
-    const url = params.get("url") ? new URL(params.get("url"), "https://huggingface.co/cakewalk/splat-data/resolve/main/") : "https://isaacprimal.github.io/splat-file-hosting/splats/frame_00001.splat";
+	// Build the initial frame URL using scene.json configuration
+	let frameNumber = "00001";
+	const url = sceneBaseUrl + sceneFramePrefix + frameNumber + sceneFrameExtension;
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
@@ -729,8 +747,6 @@ async function main(sceneConfig) {
     //console.log(req);
     if (req.status != 200)
         throw new Error(req.status + " Unable to load " + req.url);
-
-	mNumFrames = params.get("f") ? Number(params.get("f")) : mNumFrames;
 	
 	texCache=new Array(mNumFrames).fill(null);
 
@@ -756,7 +772,7 @@ async function main(sceneConfig) {
 		if (texCache[mframe-1]==null ){
 			texCache[mframe-1] = 0;
 			let frameNumber = mframe.toString().padStart(5, '0');
-			let url="https://isaacprimal.github.io/splat-file-hosting/splats/frame_"+frameNumber+".splat";
+			let url = sceneBaseUrl + sceneFramePrefix + frameNumber + sceneFrameExtension;
 			let blob=fetch(url).then((response) => response.blob()).then((blob) => selectFileWithCache(blob,mframe));
 			// console.log("loading frame "+mframe+" from web");
 		} else if (texCache[mframe-1]!=0 ){
@@ -778,7 +794,7 @@ async function main(sceneConfig) {
             if (texCache[i-1] === null) {
                 texCache[i-1] = 0; // Mark as loading
                 let frameNumber = i.toString().padStart(5, '0');
-                let url = "https://isaacprimal.github.io/splat-file-hosting/splats/frame_" + frameNumber + ".splat";
+                let url = sceneBaseUrl + sceneFramePrefix + frameNumber + sceneFrameExtension;
                 
                 fetch(url)
                     .then((response) => {
@@ -970,11 +986,8 @@ async function main(sceneConfig) {
         // if (document.activeElement != document.body) return;
         carousel = false;
         if (!activeKeys.includes(e.code)) activeKeys.push(e.code);
-        if (/\d/.test(e.key)) {
-            currentCameraIndex = parseInt(e.key)
-            camera = cameras[currentCameraIndex];
-            viewMatrix = getViewMatrix(camera);
-        }
+        // REMOVED: Hardcoded camera switching with number keys
+        // Now only responds to scene.json configuration
 		if ([' '].includes(e.key)){
 			playMovie=!playMovie;
 		}
@@ -982,15 +995,7 @@ async function main(sceneConfig) {
 			pos=invert4(viewMatrix).slice(12,15);
 			camid.innerText="Cam Pos:"+pos[0].toFixed(3)+","+pos[1].toFixed(3)+","+pos[2].toFixed(3);
 		}
-		if (['-', '_'].includes(e.key)){
-			currentCameraIndex = (currentCameraIndex + cameras.length - 1) % cameras.length;
-			viewMatrix = getViewMatrix(cameras[currentCameraIndex]);
-		}
-		if (['+', '='].includes(e.key)){
-			currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
-			viewMatrix = getViewMatrix(cameras[currentCameraIndex]);
-		}
-        //camid.innerText = "cam  " + currentCameraIndex;
+		// REMOVED: +/- camera switching - now controlled by scene.json only
         if (e.code == "KeyV") {
             location.hash =
                 "#" +

@@ -42,26 +42,114 @@ splat-file-hosting/
   "scene": "Ripley",
   "framerate": 60,
   "numFrames": 299,
-  "carouselOnLoad": true,
+  "carouselOnLoad": false,
   "center": [0, 0, 0],
-  "rotationOffset": 90,
-  "viewMatrix": [0.866, 0, 0.5, 0, -0.25, 0.866, 0.433, 0, -0.433, -0.5, 0.75, 0, 0, 1, 4, 1]
+  "rotationOffset": 0,
+  "viewMatrix": [0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 4, 1],
+  "baseUrl": "./splats/",
+  "framePrefix": "frame_",
+  "frameExtension": ".splat",
+  "camera": {
+    "id": 0,
+    "img_name": "00001",
+    "width": 1920,
+    "height": 1080,
+    "position": [0, 0, 4],
+    "rotation": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+    "fy": 1000,
+    "fx": 1000
+  }
 }
 ```
 
+#### **COMPLETE CONFIGURATION CONTROL** 🎯
+The `scene.json` file now has **FULL CONTROL** over all application parameters. No hardcoded values or URL parameters can override these settings.
+
 #### Configuration Options
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `ver` | string | Configuration version |
-| `owner` | string | Scene owner/creator |
-| `scene` | string | Scene name |
-| `framerate` | number | Target FPS for playback |
-| `numFrames` | number | Total frames in sequence |
-| `carouselOnLoad` | boolean | Auto-rotate camera on load |
-| `center` | array | Scene center point [x, y, z] |
-| `rotationOffset` | number | Initial rotation offset (degrees) |
-| `viewMatrix` | array | 4x4 camera transformation matrix |
+| Property | Type | Description | **NEW** |
+|----------|------|-------------|---------|
+| `ver` | string | Configuration version | |
+| `owner` | string | Scene owner/creator | |
+| `scene` | string | Scene name | |
+| `framerate` | number | Target FPS for playback | |
+| `numFrames` | number | Total frames in sequence | |
+| `carouselOnLoad` | boolean | Auto-rotate camera on load | |
+| `center` | array | Scene center point [x, y, z] | |
+| `rotationOffset` | number | Initial rotation offset (degrees) | |
+| `viewMatrix` | array | 4x4 camera transformation matrix | |
+| `baseUrl` | string | **🆕 Base URL for splat files** | ✅ |
+| `framePrefix` | string | **🆕 Filename prefix (e.g., "frame_")** | ✅ |
+| `frameExtension` | string | **🆕 File extension (e.g., ".splat")** | ✅ |
+| `camera` | object | **🆕 Camera configuration object** | ✅ |
+
+#### **NEW: File Loading Control** 🆕
+- **`baseUrl`**: Controls where splat files are loaded from
+  - Default: `"./splats/"`
+  - Can be any URL: `"https://example.com/myfiles/"`
+- **`framePrefix`**: Filename prefix before frame numbers
+  - Default: `"frame_"`
+  - Example: `"sequence_"` → `sequence_00001.splat`
+- **`frameExtension`**: File extension for splat files
+  - Default: `".splat"`
+  - Can be: `".ply"`, `".splatdata"`, etc.
+
+#### **NEW: Camera Configuration** 🆕
+The `camera` object provides complete control over camera parameters:
+```json
+"camera": {
+  "id": 0,
+  "img_name": "00001",
+  "width": 1920,          // Viewport width
+  "height": 1080,         // Viewport height  
+  "position": [0, 0, 4],  // Camera position [x, y, z]
+  "rotation": [           // 3x3 rotation matrix
+    [1, 0, 0],
+    [0, 1, 0], 
+    [0, 0, 1]
+  ],
+  "fy": 1000,            // Focal length Y
+  "fx": 1000             // Focal length X
+}
+```
+
+### **🚫 REMOVED CONFLICTS**
+The following features have been **REMOVED** to ensure scene.json has complete control:
+
+❌ **Hardcoded camera arrays** - Now scene.json controls camera
+❌ **URL parameter overrides** - No more `?url=` or `?f=` parameters
+❌ **Hardcoded splat URLs** - Now configurable via `baseUrl`/`framePrefix`/`frameExtension`
+❌ **Keyboard camera switching** - Number keys no longer switch cameras
+
+### **✅ CONFIGURATION EXAMPLES**
+
+#### Local Development:
+```json
+{
+  "baseUrl": "./splats/",
+  "framePrefix": "frame_",
+  "frameExtension": ".splat"
+}
+```
+
+#### Remote Server:
+```json
+{
+  "baseUrl": "https://example.com/sequences/character1/",
+  "framePrefix": "seq_",
+  "frameExtension": ".ply"
+}
+```
+
+#### Different Naming Convention:
+```json
+{
+  "baseUrl": "./data/",
+  "framePrefix": "ripley_animation_",
+  "frameExtension": ".splatdata"
+}
+```
+Result: Loads `./data/ripley_animation_00001.splatdata`, etc.
 
 ### Camera View Matrix
 

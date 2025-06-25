@@ -6,6 +6,19 @@
   "numFrames": 299,
   "carouselOnLoad": false,
   "center": [0, 0, 0],
-  "rotationOffset": 00,
-  "viewMatrix": [0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 4, 1]
-} 
+  "rotationOffset": 0,
+  "viewMatrix": [0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 4, 1],
+  "baseUrl": "./splats/",
+  "framePrefix": "frame_",
+  "frameExtension": ".splat",
+  "camera": {
+    "id": 0,
+    "img_name": "00001",
+    "width": 1920,
+    "height": 1080,
+    "position": [0, 0, 4],
+    "rotation": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+    "fy": 1000,
+    "fx": 1000
+  }
+}
