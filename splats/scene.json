@@ -1,0 +1,11 @@
+{
+  "ver": "1.0",
+  "owner": "Your Name",
+  "scene": "Your Scene Name",
+  "framerate": 30,
+  "numFrames": 50,
+  "carouselOnLoad": true,
+  "center": [0, 0, 0],
+  "rotationOffset": 0,
+  "viewMatrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 4, 1]
+} 
