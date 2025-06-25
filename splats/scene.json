@@ -3,7 +3,6 @@
   "owner": "Primal Sphere",
   "scene": "Ripley",
   "frameRate": 60,
-  "frameDuration": 16.67,
   "numFrames": 299,
   "carouselOnLoad": false,
   "center": [0, 0, 0],

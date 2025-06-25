@@ -1,14 +1,23 @@
-// Global variables - will be set from scene.json
-let cameras = [];
-let camera = null; // Will be initialized from scene.json
+let cameras = [
+    {
+        id: 0,
+        img_name: "00001",
+        width: 1959,
+        height: 1090,
+        position: [
+            -3.0089893469241797, -0.11086489695181866, -3.7527640949141428,
+        ],
+        rotation: [
+            [0.876134201218856, 0.06925962026449776, 0.47706599800804744],
+            [-0.04747421839895102, 0.9972110940209488, -0.057586739349882114],
+            [-0.4797239414934443, 0.027805376500959853, 0.8769787916452908],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    }
+];
 
-// Scene configuration variables
-let sceneBaseUrl = "./splats/"; // Default, can be overridden by scene.json
-let sceneFramePrefix = "frame_"; // Default, can be overridden by scene.json
-let sceneFrameExtension = ".splat"; // Default, can be overridden by scene.json
-
-// Global variables used throughout the application
-let viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 4, 1]; // Default view matrix
+let camera = cameras[0];
 let center = [0, 0, 0]; // Scene center
 let rotOff = 0; // Rotation offset
 let mframerate = 1000/30; // Default 30 FPS
@@ -213,21 +222,8 @@ function createWorker(self) {
 
     function generateTexture() {
         if (!buffer) return;
-        
-        // Ensure buffer length is a multiple of 4 for Float32Array
-        let alignedBuffer = buffer;
-        const remainder = buffer.byteLength % 4;
-        if (remainder !== 0) {
-            console.log("DEBUG: generateTexture - Buffer alignment needed! Aligning from", buffer.byteLength, "to", buffer.byteLength - remainder, "bytes");
-            alignedBuffer = buffer.slice(0, buffer.byteLength - remainder);
-        }
-        
-        const f_buffer = new Float32Array(alignedBuffer);
-        const u_buffer = new Uint8Array(alignedBuffer);
-        
-        // Update vertex count to use aligned buffer
-        vertexCount = Math.floor(alignedBuffer.byteLength / rowLength);
-        console.log("DEBUG: generateTexture - Using vertexCount:", vertexCount);
+        const f_buffer = new Float32Array(buffer);
+        const u_buffer = new Uint8Array(buffer);
 
         var texwidth = 1024 * 2; // Set to your desired width
         var texheight = Math.ceil((2 * vertexCount) / texwidth); // Set to your desired height
@@ -297,38 +293,9 @@ function createWorker(self) {
     }
 
     function runSort(viewProj) {
-        if (!buffer) {
-            console.log("DEBUG: runSort called but no buffer available");
-            return;
-        }
-        
-        console.log("DEBUG: runSort called with buffer size:", buffer.byteLength);
-        
-        // Ensure buffer length is a multiple of 4 for Float32Array
-        let alignedBuffer = buffer;
-        const remainder = buffer.byteLength % 4;
-        if (remainder !== 0) {
-            console.log("DEBUG: Buffer alignment needed! Aligning from", buffer.byteLength, "to", buffer.byteLength - remainder, "bytes");
-            alignedBuffer = buffer.slice(0, buffer.byteLength - remainder);
-        }
-        
-        let f_buffer;
-        try {
-            f_buffer = new Float32Array(alignedBuffer);
-            console.log("DEBUG: Successfully created Float32Array with", f_buffer.length, "elements");
-        } catch (error) {
-            console.error("DEBUG: Failed to create Float32Array:", error);
-            return;
-        }
-        
-        // Update vertex count based on aligned buffer
-        const alignedVertexCount = Math.floor(alignedBuffer.byteLength / rowLength);
-        
-        // Update global buffer to use aligned version
-        buffer = alignedBuffer;
-        vertexCount = alignedVertexCount;
-        
-        if (lastVertexCount == alignedVertexCount) {
+        if (!buffer) return;
+        const f_buffer = new Float32Array(buffer);
+        if (lastVertexCount == vertexCount) {
             let dot =
                 lastProj[2] * viewProj[2] +
                 lastProj[6] * viewProj[6] +
@@ -338,14 +305,14 @@ function createWorker(self) {
             }
         } else {
             generateTexture();
-            lastVertexCount = alignedVertexCount;
+            lastVertexCount = vertexCount;
         }
 
         //console.time("sort");
         let maxDepth = -Infinity;
         let minDepth = Infinity;
-        let sizeList = new Int32Array(alignedVertexCount);
-        for (let i = 0; i < alignedVertexCount; i++) {
+        let sizeList = new Int32Array(vertexCount);
+        for (let i = 0; i < vertexCount; i++) {
             let depth =
                 ((viewProj[2] * f_buffer[8 * i + 0] +
                     viewProj[6] * f_buffer[8 * i + 1] +
@@ -360,15 +327,15 @@ function createWorker(self) {
         // This is a 16 bit single-pass counting sort
         let depthInv = (256 * 256) / (maxDepth - minDepth);
         let counts0 = new Uint32Array(256 * 256);
-        for (let i = 0; i < alignedVertexCount; i++) {
+        for (let i = 0; i < vertexCount; i++) {
             sizeList[i] = ((sizeList[i] - minDepth) * depthInv) | 0;
             counts0[sizeList[i]]++;
         }
         let starts0 = new Uint32Array(256 * 256);
         for (let i = 1; i < 256 * 256; i++)
             starts0[i] = starts0[i - 1] + counts0[i - 1];
-        depthIndex = new Uint32Array(alignedVertexCount);
-        for (let i = 0; i < alignedVertexCount; i++) {
+        depthIndex = new Uint32Array(vertexCount);
+        for (let i = 0; i < vertexCount; i++) {
             depthIndex[starts0[sizeList[i]]++] = i;
 			//depthIndex[i]=i;
 		}
@@ -376,7 +343,7 @@ function createWorker(self) {
         //console.timeEnd("sort");
 
         lastProj = viewProj;
-        self.postMessage({ depthIndex, viewProj, vertexCount: alignedVertexCount }, [
+        self.postMessage({ depthIndex, viewProj, vertexCount }, [
             depthIndex.buffer,
         ]);
     }
@@ -716,47 +683,16 @@ async function main(sceneConfig) {
 		carousel=sceneConfig.carouselOnLoad;
 	}
 	
-	// NEW: Configure file loading paths from scene.json
-	if("baseUrl" in sceneConfig){
-		sceneBaseUrl=sceneConfig.baseUrl;
-		if (!sceneBaseUrl.endsWith('/')) {
-			sceneBaseUrl += '/';
-		}
-	}
-	if("framePrefix" in sceneConfig){
-		sceneFramePrefix=sceneConfig.framePrefix;
-	}
-	if("frameExtension" in sceneConfig){
-		sceneFrameExtension=sceneConfig.frameExtension;
-	}
-	
-	// NEW: Configure camera from scene.json
-	if("camera" in sceneConfig){
-		cameras = [sceneConfig.camera];
-		camera = cameras[0];
-	} else {
-		// Default camera if not specified
-		camera = {
-			id: 0,
-			img_name: "00001",
-			width: 1920,
-			height: 1080,
-			position: [0, 0, 4],
-			rotation: [[1,0,0],[0,1,0],[0,0,1]],
-			fy: 1000,
-			fx: 1000,
-		};
-		cameras = [camera];
-	}
-	
 	console.log("Technisync Frame Viewer");
 	console.log("(c)2024 TechniSync Corporation");
 	console.log("scene: "+scene+" : "+owner);
-	console.log("Loading from:", sceneBaseUrl);
 	
-	// Build the initial frame URL using scene.json configuration
-	let frameNumber = "00001";
-	const url = sceneBaseUrl + sceneFramePrefix + frameNumber + sceneFrameExtension;
+    const params = new URLSearchParams(location.search);
+    try {
+        viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+        carousel = false;
+    } catch (err) {}
+	const url = "splats/frame_00001.splat";
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
@@ -789,14 +725,14 @@ async function main(sceneConfig) {
 		if (texCache[mframe-1]==null ){
 			texCache[mframe-1] = 0;
 			let frameNumber = mframe.toString().padStart(5, '0');
-			let url = sceneBaseUrl + sceneFramePrefix + frameNumber + sceneFrameExtension;
+			let url="splats/frame_"+frameNumber+".splat";
 			let blob=fetch(url).then((response) => response.blob()).then((blob) => selectFileWithCache(blob,mframe));
 			// console.log("loading frame "+mframe+" from web");
 		} else if (texCache[mframe-1]!=0 ){
-			console.log("DEBUG: Loading frame "+mframe+" from cache");
+			//console.log("loading frame "+mframe+" from cache");
 			selectFile(texCache[mframe-1]);
 		} else {
-			console.log("DEBUG: Frame "+mframe+" still loading");
+			//console.log("Frame "+mframe+" still loading");
 		}
 		
 		if (mLoadedFrames==mNumFrames && !mfullyloaded) {
@@ -811,7 +747,7 @@ async function main(sceneConfig) {
             if (texCache[i-1] === null) {
                 texCache[i-1] = 0; // Mark as loading
                 let frameNumber = i.toString().padStart(5, '0');
-                let url = sceneBaseUrl + sceneFramePrefix + frameNumber + sceneFrameExtension;
+                let url = "splats/frame_" + frameNumber + ".splat";
                 
                 fetch(url)
                     .then((response) => {
@@ -1516,22 +1452,9 @@ async function main(sceneConfig) {
     frame();
 
 	const selectFileWithCache = (blob,frameid) => {
-		console.log("DEBUG: Processing frame", frameid, "blob size:", blob.size);
 		selectFile(blob);
 		texCache[frameid-1]=blob;
 		mLoadedFrames=mLoadedFrames+1;
-		console.log("DEBUG: mLoadedFrames now:", mLoadedFrames);
-		
-		// Force processing of the first frame to ensure worker starts
-		if (frameid === 1 && vertexCount === 0) {
-			console.log("DEBUG: First frame loaded, ensuring worker processes it");
-			setTimeout(() => {
-				if (vertexCount === 0) {
-					console.log("DEBUG: Forcing worker to process frame 1");
-					worker.postMessage({ view: multiply4(projectionMatrix, viewMatrix) });
-				}
-			}, 100);
-		}
 	}
 
     const selectFile = (file) => {
@@ -1564,17 +1487,12 @@ async function main(sceneConfig) {
                     splatData[3] == 10
                 ) {
                     // ply file magic header means it should be handled differently
-                    console.log("DEBUG: Processing PLY file");
                     worker.postMessage({ ply: splatData.buffer });
                 } else {
-                    console.log("DEBUG: Sending splat data to worker. Length:", splatData.length, "Vertices:", Math.floor(splatData.length / rowLength));
                     worker.postMessage({
                         buffer: splatData.buffer,
                         vertexCount: Math.floor(splatData.length / rowLength),
                     });
-                    // Immediately trigger sorting to start rendering
-                    console.log("DEBUG: Triggering initial sort");
-                    worker.postMessage({ view: multiply4(projectionMatrix, viewMatrix) });
                 }
             };
             fr.readAsArrayBuffer(file);
