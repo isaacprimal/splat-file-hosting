@@ -18,19 +18,6 @@ let cameras = [
 ];
 
 let camera = cameras[0];
-let center = [0, 0, 0]; // Scene center
-let rotOff = 0; // Rotation offset
-let mframerate = 1000/30; // Default 30 FPS
-let mNumFrames = 299; // Default number of frames
-let mframe = 1; // Current frame
-let mLoadedFrames = 0; // Number of loaded frames
-let mfullyloaded = false; // All frames loaded flag
-let mfirstframe = true; // First frame flag
-let lastmFrame = 0; // Last frame time
-let playMovie = false; // Movie playing flag
-let pauseRender = false; // Pause rendering flag
-let texCache = []; // Texture cache
-let headerVersion = "1.0"; // Expected header version
 
 function getProjectionMatrix(fx, fy, width, height) {
     const znear = 0.2;
@@ -609,30 +596,37 @@ void main () {
 `.trim();
 
 let defaultViewMatrix =  [0.01987280745947854, -0.9868683279023592, -0.1596745906739603, 0, 0.920514659592776, -0.05602180215258631, 0.380018840530592, -0, -0.38246553015987117, -0.15479111121820432, 0.907832490124456, 0, -0.0465918264274564, -0.35097902909350737, 0.1532751212774561, 0.9999999999999969];
+let rotOff = 1.0;
+let center = [.05,-2.15,4.6];
+//let rotOff = .3;
 
-// REMOVED: Duplicate variable declarations - now handled at top of file
+let viewMatrix = defaultViewMatrix;
+let pauseRender = false;
+
+//*********************************************************
+const headerVersion=1;
+let mframe=1;
+let lastmFrame = 0;
+let mfullyloaded = false;
+let mfirstframe = true;
+let mLoadedFrames = 0;
+let mframerate = 33.3667;
+let mNumFrames=60;
+let playMovie=true;
+let texCache=null;
+//*********************************************************
 
 async function loadConfig() {
     try {
-        const response = await fetch("./splats/scene.json");
+        const response = await fetch("splats/scene.json");
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error fetching scene.json, using default config:', error);
-        // Return a default configuration if scene.json doesn't exist
-        return {
-            ver: "1.0",
-            owner: "TechniSync",
-            scene: "Remote Splats",
-            frameRate: 30,
-            numFrames: 299,
-            carouselOnLoad: true,
-            center: [0, 0, 0],
-            rotationOffset: 0
-        };
+        console.error('Error fetching JSON:', error);
+        return null;
     }
 }
 
@@ -662,14 +656,14 @@ async function main(sceneConfig) {
 	if("viewMatrix" in sceneConfig){
 		viewMatrix=sceneConfig.viewMatrix;
 		if (viewMatrix.length != 16) {
-			console.error('viewMatrix must have 16 elements');
+			logging.error('viewMatrix must have 16 elements');
 			return;
 		}
 	}
 	if("center" in sceneConfig){
 		center=sceneConfig.center;
 		if (center.length != 3) {
-			console.error('center must have 3 elements');
+			logging.error('center must have 3 elements');
 			return;
 		}
 	}
@@ -692,7 +686,7 @@ async function main(sceneConfig) {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
     } catch (err) {}
-    const url = params.get("url") ? new URL(params.get("url"), "https://huggingface.co/cakewalk/splat-data/resolve/main/") : "splats/1.splat";
+    const url = params.get("url") ? new URL(params.get("url"), "https://huggingface.co/cakewalk/splat-data/resolve/main/") : "splats/frame_00001.splat";
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
@@ -700,6 +694,8 @@ async function main(sceneConfig) {
     //console.log(req);
     if (req.status != 200)
         throw new Error(req.status + " Unable to load " + req.url);
+
+	mNumFrames = params.get("f") ? Number(params.get("f")) : mNumFrames;
 	
 	texCache=new Array(mNumFrames).fill(null);
 
@@ -724,7 +720,8 @@ async function main(sceneConfig) {
     const load_frame = () => {
 		if (texCache[mframe-1]==null ){
 			texCache[mframe-1] = 0;
-			let url="splats/"+mframe+".splat";
+			let frameNumber = mframe.toString().padStart(5, '0');
+			let url="splats/frame_"+frameNumber+".splat";
 			let blob=fetch(url).then((response) => response.blob()).then((blob) => selectFileWithCache(blob,mframe));
 			// console.log("loading frame "+mframe+" from web");
 		} else if (texCache[mframe-1]!=0 ){
@@ -737,12 +734,8 @@ async function main(sceneConfig) {
 		if (mLoadedFrames==mNumFrames && !mfullyloaded) {
 			console.log("All frames loaded!");
 			mfullyloaded=true;
-			// Initialize animation timing now that all frames are loaded
-			lastmFrame = now;
 		}
     };
-
-
 
     const downsample =
         splatData.length / rowLength > 500000 ? 1 : 1 / devicePixelRatio;
@@ -851,18 +844,9 @@ async function main(sceneConfig) {
 
     worker.onmessage = (e) => {
         if (e.data.buffer) {
-            splatData = new Uint8Array(e.data.buffer);
-            const blob = new Blob([splatData.buffer], {
-                type: "application/octet-stream",
-            });
-
-            const link = document.createElement("a");
-            link.download = "model.splat";
-            link.href = URL.createObjectURL(blob);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            //pass
         } else if (e.data.texdata) {
+			pauseRender = true;
             const { texdata, texwidth, texheight } = e.data;
             // console.log(texdata)
             gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -892,13 +876,13 @@ async function main(sceneConfig) {
             );
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
+			
         } else if (e.data.depthIndex) {
             const { depthIndex, viewProj } = e.data;
             gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, depthIndex, gl.DYNAMIC_DRAW);
             vertexCount = e.data.vertexCount;
-            
-
+			pauseRender = false;
         }
     };
 
@@ -909,8 +893,11 @@ async function main(sceneConfig) {
         // if (document.activeElement != document.body) return;
         carousel = false;
         if (!activeKeys.includes(e.code)) activeKeys.push(e.code);
-        // REMOVED: Hardcoded camera switching with number keys
-        // Now only responds to scene.json configuration
+        if (/\d/.test(e.key)) {
+            currentCameraIndex = parseInt(e.key)
+            camera = cameras[currentCameraIndex];
+            viewMatrix = getViewMatrix(camera);
+        }
 		if ([' '].includes(e.key)){
 			playMovie=!playMovie;
 		}
@@ -918,7 +905,15 @@ async function main(sceneConfig) {
 			pos=invert4(viewMatrix).slice(12,15);
 			camid.innerText="Cam Pos:"+pos[0].toFixed(3)+","+pos[1].toFixed(3)+","+pos[2].toFixed(3);
 		}
-		// REMOVED: +/- camera switching - now controlled by scene.json only
+		if (['-', '_'].includes(e.key)){
+			currentCameraIndex = (currentCameraIndex + cameras.length - 1) % cameras.length;
+			viewMatrix = getViewMatrix(cameras[currentCameraIndex]);
+		}
+		if (['+', '='].includes(e.key)){
+			currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
+			viewMatrix = getViewMatrix(cameras[currentCameraIndex]);
+		}
+        //camid.innerText = "cam  " + currentCameraIndex;
         if (e.code == "KeyV") {
             location.hash =
                 "#" +
@@ -1366,7 +1361,6 @@ async function main(sceneConfig) {
 		if(mfirstframe){
 			mfirstframe=false;
 			advance_frame();
-			lastmFrame = now;
 		}
 		
 		if(mfullyloaded) {
@@ -1427,9 +1421,7 @@ async function main(sceneConfig) {
 
     const selectFile = (file) => {
         const fr = new FileReader();
-        const fileName = file.name || 'unknown.splat'; // Handle blobs without names
-        
-        if (/\.json$/i.test(fileName)) {
+        if (/\.json$/i.test(file.name)) {
             fr.onload = () => {
                 cameras = JSON.parse(fr.result);
                 viewMatrix = getViewMatrix(cameras[0]);
@@ -1447,6 +1439,7 @@ async function main(sceneConfig) {
         } else {
             fr.onload = () => {
                 splatData = new Uint8Array(fr.result);
+                //console.log("Loaded", Math.floor(splatData.length / rowLength));
 
                 if (
                     splatData[0] == 112 &&
