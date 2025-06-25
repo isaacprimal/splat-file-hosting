@@ -643,7 +643,7 @@ let texCache=null;
 
 async function loadConfig() {
     try {
-        const response = await fetch("https://isaacprimal.github.io/splat-file-hosting/splats/scene.json");
+        const response = await fetch("./splats/scene.json");
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
