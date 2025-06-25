@@ -908,13 +908,19 @@ async function main(sceneConfig) {
     resize();
 
     worker.onmessage = (e) => {
-        console.log("DEBUG: Worker message received:", Object.keys(e.data));
         if (e.data.buffer) {
-            console.log("DEBUG: Worker buffer message");
-            //pass
+            splatData = new Uint8Array(e.data.buffer);
+            const blob = new Blob([splatData.buffer], {
+                type: "application/octet-stream",
+            });
+
+            const link = document.createElement("a");
+            link.download = "model.splat";
+            link.href = URL.createObjectURL(blob);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         } else if (e.data.texdata) {
-            console.log("DEBUG: Worker texture data received");
-			pauseRender = true;
             const { texdata, texwidth, texheight } = e.data;
             // console.log(texdata)
             gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -944,15 +950,16 @@ async function main(sceneConfig) {
             );
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
-			
         } else if (e.data.depthIndex) {
-            console.log("DEBUG: Worker depth index received! vertexCount:", e.data.vertexCount);
             const { depthIndex, viewProj } = e.data;
             gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, depthIndex, gl.DYNAMIC_DRAW);
             vertexCount = e.data.vertexCount;
-            console.log("DEBUG: Set vertexCount to:", vertexCount);
-			pauseRender = false;
+            
+            // Hide the spinner immediately when we have vertices to render
+            if (vertexCount > 0) {
+                document.getElementById("spinner").style.display = "none";
+            }
         }
     };
 
