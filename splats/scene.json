@@ -4,8 +4,8 @@
   "scene": "Ripley",
   "framerate": 60,
   "numFrames": 299,
-  "carouselOnLoad": true,
+  "carouselOnLoad": false,
   "center": [0, 0, 0],
-  "rotationOffset": 90,
+  "rotationOffset": 00,
   "viewMatrix": [0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 4, 1]
 } 
