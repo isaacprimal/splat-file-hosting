@@ -737,6 +737,8 @@ async function main(sceneConfig) {
 		if (mLoadedFrames==mNumFrames && !mfullyloaded) {
 			console.log("All frames loaded!");
 			mfullyloaded=true;
+			// Initialize animation timing now that all frames are loaded
+			lastmFrame = now;
 		}
     };
 
@@ -1364,6 +1366,7 @@ async function main(sceneConfig) {
 		if(mfirstframe){
 			mfirstframe=false;
 			advance_frame();
+			lastmFrame = now;
 		}
 		
 		if(mfullyloaded) {
