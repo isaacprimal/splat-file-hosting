@@ -734,7 +734,6 @@ async function main(sceneConfig) {
 		if (mLoadedFrames==mNumFrames && !mfullyloaded) {
 			console.log("All frames loaded!");
 			mfullyloaded=true;
-			lastmFrame = now;  // Reset timing when all frames loaded
 		}
     };
 
