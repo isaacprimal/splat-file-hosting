@@ -647,7 +647,7 @@ async function main(sceneConfig) {
 	if("scene" in sceneConfig){
 		scene=sceneConfig.scene;
 	}
-	if("frameRate" in sceneConfig){
+	if("framerate" in sceneConfig){
 		mframerate=1000.0/sceneConfig.framerate;
 	}
 	if("frameDuration" in sceneConfig){
