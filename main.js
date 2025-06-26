@@ -224,10 +224,10 @@ function createWorker(self) {
         // should have been the native format as it'd be very easy to
         // load it into webgl.
         for (let i = 0; i < vertexCount; i++) {
-            // x, y, z - Apply 180 degree Y-axis rotation to asset
-            texdata_f[8 * i + 0] = -f_buffer[8 * i + 0]; // X becomes -X
-            texdata_f[8 * i + 1] = f_buffer[8 * i + 1];  // Y stays Y
-            texdata_f[8 * i + 2] = -f_buffer[8 * i + 2]; // Z becomes -Z
+            // x, y, z
+            texdata_f[8 * i + 0] = f_buffer[8 * i + 0];
+            texdata_f[8 * i + 1] = f_buffer[8 * i + 1];
+            texdata_f[8 * i + 2] = f_buffer[8 * i + 2];
 
             // r, g, b, a
             texdata_c[4 * (8 * i + 7) + 0] = u_buffer[32 * i + 24 + 0];
@@ -302,15 +302,10 @@ function createWorker(self) {
         let minDepth = Infinity;
         let sizeList = new Int32Array(vertexCount);
         for (let i = 0; i < vertexCount; i++) {
-            // Apply same 180 degree Y-axis rotation for depth sorting
-            let rotatedX = -f_buffer[8 * i + 0]; // X becomes -X
-            let rotatedY = f_buffer[8 * i + 1];  // Y stays Y  
-            let rotatedZ = -f_buffer[8 * i + 2]; // Z becomes -Z
-            
             let depth =
-                ((viewProj[2] * rotatedX +
-                    viewProj[6] * rotatedY +
-                    viewProj[10] * rotatedZ) *
+                ((viewProj[2] * f_buffer[8 * i + 0] +
+                    viewProj[6] * f_buffer[8 * i + 1] +
+                    viewProj[10] * f_buffer[8 * i + 2]) *
                     4096) |
                 0;
             sizeList[i] = depth;
