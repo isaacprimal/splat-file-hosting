@@ -248,17 +248,42 @@
 			.logo:hover {
 				opacity: 1;
 			}
+			
+			/* Hide keyboard/mouse instructions on mobile devices */
+			@media (max-width: 768px) {
+				.desktop-only {
+					display: none !important;
+				}
+			}
 		</style>
 	</head>
 	<body>
 		<script>
 			if(location.host.includes('hf.space')) document.body.classList.add('nohf');
+			
+			// Hide desktop instructions on mobile devices
+			function isMobileDevice() {
+				return (
+					/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+					(navigator.maxTouchPoints && navigator.maxTouchPoints > 2) ||
+					window.innerWidth <= 768
+				);
+			}
+			
+			if (isMobileDevice()) {
+				document.addEventListener('DOMContentLoaded', function() {
+					const instructions = document.querySelector('.desktop-only');
+					if (instructions) {
+						instructions.style.display = 'none';
+					}
+				});
+			}
 		</script>
 		<div id="info">
 			<div class="logo-container">
 				<img src="clean_alpha.png" alt="Primal Sphere Logo" class="logo">
 				<h3 class="nohf">Primal Sphere WebGL Viewer</h3>
-				<p>
+				<p class="desktop-only">
 					Use Keyboard:<br>
 					- A,W,S,D to move<br>
 					- Q,R to rotate<br>
