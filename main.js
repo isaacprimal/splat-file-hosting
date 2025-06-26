@@ -616,7 +616,7 @@ async function main() {
     let mframe = 1;
     let lastmFrame = 0;
     let mfullyloaded = false;
-    let mfirstframe = true;
+
     let mLoadedFrames = 0;
 
     
@@ -793,89 +793,12 @@ async function main() {
         mLoadedFrames = mLoadedFrames + 1;
     };
 
-    // Function to load next file in sequence
-    const loadNextSequenceFile = async () => {
-        if (sequenceFiles.length === 0) return;
-        
-        const fileUrl = sequenceFiles[currentSequenceIndex];
-        console.log(`Loading sequence file ${currentSequenceIndex + 1}/${sequenceFiles.length}: ${fileUrl}`);
-        
-        try {
-            const req = await fetch(fileUrl, {
-                mode: "cors",
-                credentials: "omit",
-            });
-            
-            if (req.status !== 200) {
-                throw new Error(`${req.status} Unable to load ${req.url}`);
-            }
-            
-            const reader = req.body.getReader();
-            // Start with 3MB buffer to handle all splat file sizes reliably
-            splatData = new Uint8Array(3 * 1024 * 1024);
-            
-            let bytesRead = 0;
-            let lastVertexCount = -1;
-            let stopLoading = false;
-            
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done || stopLoading) break;
-                
-                // Check bounds before setting data
-                if (bytesRead + value.length > splatData.length) {
-                    console.error(`Splat file too large: ${bytesRead + value.length} bytes > 3MB buffer`);
-                    break; // Skip this file if it's too large
-                }
-                
-                splatData.set(value, bytesRead);
-                bytesRead += value.length;
-                
-                const currentVertexCount = Math.floor(bytesRead / rowLength);
-                if (currentVertexCount > lastVertexCount) {
-                    if (!isPly(splatData)) {
-                        worker.postMessage({
-                            buffer: splatData.buffer,
-                            vertexCount: currentVertexCount,
-                        });
-                    }
-                    lastVertexCount = currentVertexCount;
-                }
-            }
-            
-            if (!stopLoading) {
-                // Trim buffer to actual data size
-                const trimmedData = splatData.slice(0, bytesRead);
-                
-                if (isPly(trimmedData)) {
-                    // ply file magic header means it should be handled differently
-                    worker.postMessage({ ply: trimmedData.buffer, save: false });
-                } else {
-                    worker.postMessage({
-                        buffer: trimmedData.buffer,
-                        vertexCount: Math.floor(bytesRead / rowLength),
-                    });
-                }
-                
-                console.log(`Loaded frame ${currentSequenceIndex + 1}: ${bytesRead} bytes`);
-            }
-            
-            // Update sequence index
-            currentSequenceIndex = (currentSequenceIndex + 1) % sequenceFiles.length;
-            
-        } catch (err) {
-            console.error("Failed to load sequence file:", err);
-            // Skip to next file on error
-            currentSequenceIndex = (currentSequenceIndex + 1) % sequenceFiles.length;
-        }
-    };
-
-    // Load first sequence file if sequence is provided
+    // Start animation playback immediately - frames will load on demand
     if (sequenceFiles.length > 0) {
-        console.log("Starting sequence loading...");
-        await loadNextSequenceFile();
-        // Start animation playback after first frame loads
+        console.log("Starting sequence animation...");
         isPlayingSequence = true;
+        // Load first frame
+        load_frame();
         console.log("Sequence animation started");
     }
 
@@ -1405,13 +1328,6 @@ async function main() {
             lastFrameTime = now;
         }
         
-        // Initialize first frame if sequence is loaded
-        if (mfirstframe && sequenceFiles.length > 0) {
-            mfirstframe = false;
-            lastFrameTime = now; // Initialize timing
-            advance_frame();
-        }
-        
         lastFrame = now;
         requestAnimationFrame(frame);
     };
@@ -1436,14 +1352,13 @@ async function main() {
             };
             fr.readAsText(file);
         } else {
-            stopLoading = true;
             fr.onload = () => {
                 splatData = new Uint8Array(fr.result);
                 console.log("Loaded", Math.floor(splatData.length / rowLength));
 
                 if (isPly(splatData)) {
                     // ply file magic header means it should be handled differently
-                    worker.postMessage({ ply: splatData.buffer, save: true });
+                    worker.postMessage({ ply: splatData.buffer, save: false });
                 } else {
                     worker.postMessage({
                         buffer: splatData.buffer,
