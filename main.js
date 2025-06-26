@@ -14,7 +14,145 @@ let cameras = [
         ],
         fy: 1164.6601287484507,
         fx: 1159.5880733038064,
-    }
+    },
+    {
+        id: 1,
+        img_name: "00009",
+        width: 1959,
+        height: 1090,
+        position: [
+            -2.5199776022057296, -0.09704735754873686, -3.6247725540304545,
+        ],
+        rotation: [
+            [0.9982731285632193, -0.011928707708098955, -0.05751927260507243],
+            [0.0065061360949636325, 0.9955928229282383, -0.09355533724430458],
+            [0.058381769258182864, 0.09301955098900708, 0.9939511719154457],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 2,
+        img_name: "00017",
+        width: 1959,
+        height: 1090,
+        position: [
+            -0.7737533667465242, -0.3364271945329695, -2.9358969417573753,
+        ],
+        rotation: [
+            [0.9998813418672372, 0.013742375651625236, -0.0069605529394208224],
+            [-0.014268370388586709, 0.996512943252834, -0.08220929105659476],
+            [0.00580653013657589, 0.08229885200307129, 0.9965907801935302],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 3,
+        img_name: "00025",
+        width: 1959,
+        height: 1090,
+        position: [
+            1.2198221749590001, -0.2196687861401182, -2.3183162007028453,
+        ],
+        rotation: [
+            [0.9208648867765482, 0.0012010625395201253, 0.389880004297208],
+            [-0.06298204172269357, 0.987319521752825, 0.14571693239364383],
+            [-0.3847611242348369, -0.1587410451475895, 0.9092635249821667],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 4,
+        img_name: "00033",
+        width: 1959,
+        height: 1090,
+        position: [
+            1.742387858893817, -0.13848225198886954, -2.0566370113193146,
+        ],
+        rotation: [
+            [0.24669889292141334, -0.08370189346592856, -0.9654706879349405],
+            [0.11343747891376445, 0.9919082664242816, -0.05700815184573074],
+            [0.9624300466054861, -0.09545671285663988, 0.2541976029815521],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 5,
+        img_name: "00041",
+        width: 1959,
+        height: 1090,
+        position: [
+            3.6567309419223935, -0.16470990600750707, -1.3458085590422042,
+        ],
+        rotation: [
+            [0.2341293058324528, -0.02968330457755884, -0.9717522161434825],
+            [0.10270823606832301, 0.99469554638321, -0.005638106875665722],
+            [0.9667649592295676, -0.09848690996657204, 0.2359360976431732],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 6,
+        img_name: "00049",
+        width: 1959,
+        height: 1090,
+        position: [
+            3.9013554243203497, -0.2597500978038105, -0.8106154188297828,
+        ],
+        rotation: [
+            [0.6717235545638952, -0.015718162115524837, -0.7406351366386528],
+            [0.055627354673906296, 0.9980224478387622, 0.029270992841185218],
+            [0.7387104058127439, -0.060861588786650656, 0.6712695459756353],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 7,
+        img_name: "00057",
+        width: 1959,
+        height: 1090,
+        position: [4.742994605467533, -0.05591660945412069, 0.9500365976084458],
+        rotation: [
+            [-0.17042655709210375, 0.01207080756938, -0.9852964448542146],
+            [0.1165090336695526, 0.9931575292530063, -0.00798543433078162],
+            [0.9784581921120181, -0.1161568667478904, -0.1706667764862097],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 8,
+        img_name: "00065",
+        width: 1959,
+        height: 1090,
+        position: [4.34676307626522, 0.08168160516967145, 1.0876221470355405],
+        rotation: [
+            [-0.003575447631888379, -0.044792503246552894, -0.9989899137764799],
+            [0.10770152645126597, 0.9931680875192705, -0.04491693593046672],
+            [0.9941768441149182, -0.10775333677534978, 0.0012732004866391048],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
+    {
+        id: 9,
+        img_name: "00073",
+        width: 1959,
+        height: 1090,
+        position: [3.264984351114202, 0.078974937336732, 1.0117200284114904],
+        rotation: [
+            [-0.026919994628162257, -0.1565891128261527, -0.9872968974090509],
+            [0.08444552208239385, 0.983768234577625, -0.1583319754069128],
+            [0.9960643893290491, -0.0876350978794554, -0.013259786205163005],
+        ],
+        fy: 1164.6601287484507,
+        fx: 1159.5880733038064,
+    },
 ];
 
 let camera = cameras[0];
@@ -295,7 +433,7 @@ function createWorker(self) {
             lastVertexCount = vertexCount;
         }
 
-        //console.time("sort");
+        console.time("sort");
         let maxDepth = -Infinity;
         let minDepth = Infinity;
         let sizeList = new Int32Array(vertexCount);
@@ -312,7 +450,7 @@ function createWorker(self) {
         }
 
         // This is a 16 bit single-pass counting sort
-        let depthInv = (256 * 256) / (maxDepth - minDepth);
+        let depthInv = (256 * 256 - 1) / (maxDepth - minDepth);
         let counts0 = new Uint32Array(256 * 256);
         for (let i = 0; i < vertexCount; i++) {
             sizeList[i] = ((sizeList[i] - minDepth) * depthInv) | 0;
@@ -322,12 +460,10 @@ function createWorker(self) {
         for (let i = 1; i < 256 * 256; i++)
             starts0[i] = starts0[i - 1] + counts0[i - 1];
         depthIndex = new Uint32Array(vertexCount);
-        for (let i = 0; i < vertexCount; i++) {
+        for (let i = 0; i < vertexCount; i++)
             depthIndex[starts0[sizeList[i]]++] = i;
-			//depthIndex[i]=i;
-		}
 
-        //console.timeEnd("sort");
+        console.timeEnd("sort");
 
         lastProj = viewProj;
         self.postMessage({ depthIndex, viewProj, vertexCount }, [
@@ -503,7 +639,7 @@ function createWorker(self) {
             runSort(viewProj);
             buffer = processPlyBuffer(e.data.ply);
             vertexCount = Math.floor(buffer.byteLength / rowLength);
-            postMessage({ buffer: buffer });
+            postMessage({ buffer: buffer, save: !!e.data.save });
         } else if (e.data.buffer) {
             buffer = e.data.buffer;
             vertexCount = e.data.vertexCount;
@@ -548,8 +684,8 @@ void main () {
     mat3 Vrk = mat3(u1.x, u1.y, u2.x, u1.y, u2.y, u3.x, u2.x, u3.x, u3.y);
 
     mat3 J = mat3(
-        focal.x / cam.z, 0., -(focal.x * cam.x) / (cam.z * cam.z), 
-        0., -focal.y / cam.z, (focal.y * cam.y) / (cam.z * cam.z), 
+        focal.x / cam.z, 0., -(focal.x * cam.x) / (cam.z * cam.z),
+        0., -focal.y / cam.z, (focal.y * cam.y) / (cam.z * cam.z),
         0., 0., 0.
     );
 
@@ -570,8 +706,8 @@ void main () {
 
     vec2 vCenter = vec2(pos2d) / pos2d.w;
     gl_Position = vec4(
-        vCenter 
-        + position.x * majorAxis / viewport 
+        vCenter
+        + position.x * majorAxis / viewport
         + position.y * minorAxis / viewport, 0.0, 1.0);
 
 }
@@ -595,151 +731,71 @@ void main () {
 
 `.trim();
 
-let defaultViewMatrix =  [0.01987280745947854, -0.9868683279023592, -0.1596745906739603, 0, 0.920514659592776, -0.05602180215258631, 0.380018840530592, -0, -0.38246553015987117, -0.15479111121820432, 0.907832490124456, 0, -0.0465918264274564, -0.35097902909350737, 0.1532751212774561, 0.9999999999999969];
-let rotOff = 1.0;
-let center = [.05,-2.15,4.6];
-//let rotOff = .3;
-
+let defaultViewMatrix = [
+    0.47, 0.04, 0.88, 0, -0.11, 0.99, 0.02, 0, -0.88, -0.11, 0.47, 0, 0.07,
+    0.03, 6.55, 1,
+];
 let viewMatrix = defaultViewMatrix;
-let pauseRender = false;
-
-//*********************************************************
-const headerVersion=1;
-let mframe=1;
-let lastmFrame = 0;
-let mfullyloaded = false;
-let mfirstframe = true;
-let mLoadedFrames = 0;
-let mframerate = 33.3667;
-let mNumFrames=60;
-let playMovie=true;
-let texCache=null;
-//*********************************************************
-
-async function loadConfig() {
-    try {
-        const response = await fetch("splats/scene.json");
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching JSON:', error);
-        return null;
-    }
-}
-
-async function main(sceneConfig) {
-	
-	let owner="Undefined";
-	let scene="Unknown";
-	let carousel = true;
-	
-	if("ver" in sceneConfig){
-		if (sceneConfig.ver != headerVersion) {
-			console.warn('sceneConfig version is '+sceneConfig.ver + "expected" + headerVersion);
-		}
-	}	
-	if("owner" in sceneConfig){
-		owner=sceneConfig.owner;
-	}
-	if("scene" in sceneConfig){
-		scene=sceneConfig.scene;
-	}
-	if("framerate" in sceneConfig){
-		mframerate=1000.0/sceneConfig.framerate;
-	}
-	if("frameDuration" in sceneConfig){
-      mframerate=sceneConfig.frameDuration;
-    }
-	if("viewMatrix" in sceneConfig){
-		viewMatrix=sceneConfig.viewMatrix;
-		if (viewMatrix.length != 16) {
-			logging.error('viewMatrix must have 16 elements');
-			return;
-		}
-	}
-	if("center" in sceneConfig){
-		center=sceneConfig.center;
-		if (center.length != 3) {
-			logging.error('center must have 3 elements');
-			return;
-		}
-	}
-	if("rotationOffset" in sceneConfig){
-		rotOff=sceneConfig.rotationOffset;
-	}
-	if("numFrames" in sceneConfig){
-		mNumFrames=sceneConfig.numFrames;
-	}
-	if("carouselOnLoad" in sceneConfig){
-		carousel=sceneConfig.carouselOnLoad;
-	}
-	
-	console.log("Technisync Frame Viewer");
-	console.log("(c)2024 TechniSync Corporation");
-	console.log("scene: "+scene+" : "+owner);
-	
+async function main() {
+    let carousel = false;
+    
+    // Sequence playback variables
+    let sequenceFiles = [];
+    let currentSequenceIndex = 0;
+    let isPlayingSequence = false;
+    let sequenceFrameRate = 30; // fps
+    let lastFrameTime = 0;
+    let sequenceLoop = true;
+    let texCache = null;
+    let mNumFrames = 0;
+    let mframe = 1;
+    let lastmFrame = 0;
+    let mfullyloaded = false;
+    let mfirstframe = true;
+    let mLoadedFrames = 0;
+    let mframerate = 1000.0 / 30; // 30 fps default
+    
     const params = new URLSearchParams(location.search);
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
     } catch (err) {}
-    const url = params.get("url") ? new URL(params.get("url"), "https://huggingface.co/cakewalk/splat-data/resolve/main/") : "splats/frame_00001.splat";
+    
+    // Setup hardcoded sequence files from GitHub
+    const baseUrl = "https://isaacprimal.github.io/splat-file-hosting/splats/";
+    for (let i = 1; i <= 299; i++) {
+        const frameNumber = i.toString().padStart(5, '0');
+        sequenceFiles.push(`${baseUrl}frame_${frameNumber}.splat`);
+    }
+    
+    if (sequenceFiles.length > 0) {
+        mNumFrames = sequenceFiles.length;
+        texCache = new Array(mNumFrames).fill(null);
+        isPlayingSequence = true;
+        console.log(`Loaded sequence with ${mNumFrames} files`);
+    }
+    
+    const url = new URL(
+        // "nike.splat",
+        // location.href,
+        params.get("url") || "train.splat",
+        "https://huggingface.co/cakewalk/splat-data/resolve/main/",
+    );
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
     });
-    //console.log(req);
+    console.log(req);
     if (req.status != 200)
         throw new Error(req.status + " Unable to load " + req.url);
-
-	mNumFrames = params.get("f") ? Number(params.get("f")) : mNumFrames;
-	
-	texCache=new Array(mNumFrames).fill(null);
 
     const rowLength = 3 * 4 + 3 * 4 + 4 + 4;
     const reader = req.body.getReader();
     let splatData = new Uint8Array(req.headers.get("content-length"));
 
-    const advance_frame = () => {
-		mframe=mframe+1;
-		if (mframe>mNumFrames)
-			mframe=1;
-		load_frame();
-    };
-
-    const retard_frame = () => {
-		mframe=mframe-1;
-		if (mframe==0)
-			mframe=mNumFrames;
-		load_frame();
-    };
-
-    const load_frame = () => {
-		if (texCache[mframe-1]==null ){
-			texCache[mframe-1] = 0;
-			let frameNumber = mframe.toString().padStart(5, '0');
-			let url="splats/frame_"+frameNumber+".splat";
-			let blob=fetch(url).then((response) => response.blob()).then((blob) => selectFileWithCache(blob,mframe));
-			// console.log("loading frame "+mframe+" from web");
-		} else if (texCache[mframe-1]!=0 ){
-			//console.log("loading frame "+mframe+" from cache");
-			selectFile(texCache[mframe-1]);
-		} else {
-			//console.log("Frame "+mframe+" still loading");
-		}
-		
-		if (mLoadedFrames==mNumFrames && !mfullyloaded) {
-			console.log("All frames loaded!");
-			mfullyloaded=true;
-		}
-    };
-
     const downsample =
         splatData.length / rowLength > 500000 ? 1 : 1 / devicePixelRatio;
-    //console.log(splatData.length / rowLength, downsample);
+    console.log(splatData.length / rowLength, downsample);
 
     const worker = new Worker(
         URL.createObjectURL(
@@ -842,11 +898,130 @@ async function main(sceneConfig) {
     window.addEventListener("resize", resize);
     resize();
 
+    // Sequence frame management functions
+    const advance_frame = () => {
+        mframe = mframe + 1;
+        if (mframe > mNumFrames)
+            mframe = 1;
+        load_frame();
+    };
+
+    const retard_frame = () => {
+        mframe = mframe - 1;
+        if (mframe == 0)
+            mframe = mNumFrames;
+        load_frame();
+    };
+
+    const load_frame = () => {
+        if (texCache[mframe - 1] == null) {
+            texCache[mframe - 1] = 0;
+            let url = sequenceFiles[mframe - 1];
+            fetch(url).then((response) => response.blob()).then((blob) => selectFileWithCache(blob, mframe));
+            console.log("loading frame " + mframe + " from web");
+        } else if (texCache[mframe - 1] != 0) {
+            console.log("loading frame " + mframe + " from cache");
+            selectFile(texCache[mframe - 1]);
+        } else {
+            console.log("Frame " + mframe + " still loading");
+        }
+        
+        if (mLoadedFrames == mNumFrames && !mfullyloaded) {
+            console.log("All frames loaded!");
+            mfullyloaded = true;
+        }
+    };
+
+    const selectFileWithCache = (blob, frameid) => {
+        selectFile(blob);
+        texCache[frameid - 1] = blob;
+        mLoadedFrames = mLoadedFrames + 1;
+    };
+
+    // Function to load next file in sequence
+    const loadNextSequenceFile = async () => {
+        if (sequenceFiles.length === 0) return;
+        
+        const fileUrl = sequenceFiles[currentSequenceIndex];
+        console.log(`Loading sequence file ${currentSequenceIndex + 1}/${sequenceFiles.length}: ${fileUrl}`);
+        
+        try {
+            const req = await fetch(fileUrl, {
+                mode: "cors",
+                credentials: "omit",
+            });
+            
+            if (req.status !== 200) {
+                throw new Error(`${req.status} Unable to load ${req.url}`);
+            }
+            
+            const reader = req.body.getReader();
+            const contentLength = parseInt(req.headers.get("content-length"));
+            splatData = new Uint8Array(contentLength);
+            
+            let bytesRead = 0;
+            let lastVertexCount = -1;
+            let stopLoading = false;
+            
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done || stopLoading) break;
+                
+                splatData.set(value, bytesRead);
+                bytesRead += value.length;
+                
+                if (vertexCount > lastVertexCount) {
+                    if (!isPly(splatData)) {
+                        worker.postMessage({
+                            buffer: splatData.buffer,
+                            vertexCount: Math.floor(bytesRead / rowLength),
+                        });
+                    }
+                    lastVertexCount = vertexCount;
+                }
+            }
+            
+            if (!stopLoading) {
+                if (isPly(splatData)) {
+                    // ply file magic header means it should be handled differently
+                    worker.postMessage({ ply: splatData.buffer, save: false });
+                } else {
+                    worker.postMessage({
+                        buffer: splatData.buffer,
+                        vertexCount: Math.floor(bytesRead / rowLength),
+                    });
+                }
+            }
+            
+            // Update sequence index
+            currentSequenceIndex = (currentSequenceIndex + 1) % sequenceFiles.length;
+            
+        } catch (err) {
+            console.error("Failed to load sequence file:", err);
+            // Skip to next file on error
+            currentSequenceIndex = (currentSequenceIndex + 1) % sequenceFiles.length;
+        }
+    };
+
+    // Load first sequence file if sequence is provided
+    if (sequenceFiles.length > 0) {
+        await loadNextSequenceFile();
+    }
+
     worker.onmessage = (e) => {
         if (e.data.buffer) {
-            //pass
+            splatData = new Uint8Array(e.data.buffer);
+            if (e.data.save) {
+                const blob = new Blob([splatData.buffer], {
+                    type: "application/octet-stream",
+                });
+                const link = document.createElement("a");
+                link.download = "model.splat";
+                link.href = URL.createObjectURL(blob);
+                document.body.appendChild(link);
+                link.click();
+            }
         } else if (e.data.texdata) {
-			pauseRender = true;
             const { texdata, texwidth, texheight } = e.data;
             // console.log(texdata)
             gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -876,54 +1051,81 @@ async function main(sceneConfig) {
             );
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
-			
         } else if (e.data.depthIndex) {
             const { depthIndex, viewProj } = e.data;
             gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, depthIndex, gl.DYNAMIC_DRAW);
             vertexCount = e.data.vertexCount;
-			pauseRender = false;
         }
     };
 
     let activeKeys = [];
-	let currentCameraIndex = 0;
+    let currentCameraIndex = 0;
 
     window.addEventListener("keydown", (e) => {
         // if (document.activeElement != document.body) return;
         carousel = false;
         if (!activeKeys.includes(e.code)) activeKeys.push(e.code);
         if (/\d/.test(e.key)) {
-            currentCameraIndex = parseInt(e.key)
+            currentCameraIndex = parseInt(e.key);
             camera = cameras[currentCameraIndex];
             viewMatrix = getViewMatrix(camera);
         }
-		if ([' '].includes(e.key)){
-			playMovie=!playMovie;
-		}
-		if (['z'].includes(e.key)){
-			pos=invert4(viewMatrix).slice(12,15);
-			camid.innerText="Cam Pos:"+pos[0].toFixed(3)+","+pos[1].toFixed(3)+","+pos[2].toFixed(3);
-		}
-		if (['-', '_'].includes(e.key)){
-			currentCameraIndex = (currentCameraIndex + cameras.length - 1) % cameras.length;
-			viewMatrix = getViewMatrix(cameras[currentCameraIndex]);
-		}
-		if (['+', '='].includes(e.key)){
-			currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
-			viewMatrix = getViewMatrix(cameras[currentCameraIndex]);
-		}
-        //camid.innerText = "cam  " + currentCameraIndex;
+        if (["-", "_"].includes(e.key)) {
+            currentCameraIndex =
+                (currentCameraIndex + cameras.length - 1) % cameras.length;
+            viewMatrix = getViewMatrix(cameras[currentCameraIndex]);
+        }
+        if (["+", "="].includes(e.key)) {
+            currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
+            viewMatrix = getViewMatrix(cameras[currentCameraIndex]);
+        }
+        camid.innerText = "cam  " + currentCameraIndex;
         if (e.code == "KeyV") {
             location.hash =
                 "#" +
                 JSON.stringify(
                     viewMatrix.map((k) => Math.round(k * 100) / 100),
                 );
-                camid.innerText =""
+            camid.innerText = "";
         } else if (e.code === "KeyP") {
             carousel = true;
-            camid.innerText =""
+            camid.innerText = "";
+        }
+        
+        // Sequence playback controls
+        if (sequenceFiles.length > 0) {
+            if (e.code === "Space") {
+                // Toggle sequence playback
+                isPlayingSequence = !isPlayingSequence;
+                console.log(`Sequence playback ${isPlayingSequence ? 'started' : 'paused'}`);
+                camid.innerText = `seq ${isPlayingSequence ? 'play' : 'pause'}`;
+            } else if (e.code === "ArrowLeft") {
+                // Previous frame
+                retard_frame();
+                camid.innerText = `seq ${mframe}/${mNumFrames}`;
+            } else if (e.code === "ArrowRight") {
+                // Next frame
+                advance_frame();
+                camid.innerText = `seq ${mframe}/${mNumFrames}`;
+            } else if (e.code === "BracketLeft") {
+                // Decrease frame rate
+                sequenceFrameRate = Math.max(1, sequenceFrameRate - 5);
+                mframerate = 1000.0 / sequenceFrameRate;
+                console.log(`Frame rate: ${sequenceFrameRate} fps`);
+                camid.innerText = `${sequenceFrameRate} fps`;
+            } else if (e.code === "BracketRight") {
+                // Increase frame rate
+                sequenceFrameRate = Math.min(60, sequenceFrameRate + 5);
+                mframerate = 1000.0 / sequenceFrameRate;
+                console.log(`Frame rate: ${sequenceFrameRate} fps`);
+                camid.innerText = `${sequenceFrameRate} fps`;
+            } else if (e.code === "KeyL") {
+                // Toggle loop
+                sequenceLoop = !sequenceLoop;
+                console.log(`Loop ${sequenceLoop ? 'enabled' : 'disabled'}`);
+                camid.innerText = `loop ${sequenceLoop ? 'on' : 'off'}`;
+            }
         }
     });
     window.addEventListener("keyup", (e) => {
@@ -943,106 +1145,71 @@ async function main(sceneConfig) {
                 e.deltaMode == 1
                     ? lineHeight
                     : e.deltaMode == 2
-                    ? innerHeight
-                    : 1;
+                      ? innerHeight
+                      : 1;
             let inv = invert4(viewMatrix);
-            if (e.shiftKey) {
-                inv = translate4(
-                    inv,
-                    (e.deltaX * scale) / innerWidth,
-                    (e.deltaY * scale) / innerHeight,
-                    0,
-                );
-            } else if (e.ctrlKey || e.metaKey) {
-                // inv = rotate4(inv,  (e.deltaX * scale) / innerWidth,  0, 0, 1);
-                // inv = translate4(inv,  0, (e.deltaY * scale) / innerHeight, 0);
-                // let preY = inv[13];
-                inv = translate4(
-                    inv,
-                    0,
-                    0,
-                    (-10 * (e.deltaY * scale)) / innerHeight,
-                );
-                // inv[13] = preY;
-            } else {
-                let d = 4;
-                inv = translate4(inv, 0, 0, d);
-                inv = rotate4(inv, -(e.deltaX * scale) / innerWidth, 0, 1, 0);
-                inv = rotate4(inv, (e.deltaY * scale) / innerHeight, 1, 0, 0);
-                inv = translate4(inv, 0, 0, -d);
-            }
+            
+            // Mouse wheel - Zoom in/out
+            inv = translate4(
+                inv,
+                0,
+                0,
+                (-5 * (e.deltaY * scale)) / innerHeight,
+            );
 
             viewMatrix = invert4(inv);
         },
         { passive: false },
     );
 
-    let startX, startY, startPitch, startYaw, down;
-
+    let startX, startY, down;
     canvas.addEventListener("mousedown", (e) => {
         carousel = false;
         e.preventDefault();
         startX = e.clientX;
         startY = e.clientY;
-		
-		startPitch = Math.asin(-viewMatrix[2]);
-        let roll;
-
-        // Check for gimbal lock
-        if (Math.abs(viewMatrix[2]) < 0.99999) {
-			// Calculate yaw and roll (in radians)
-			startYaw = Math.atan2(viewMatrix[6],  viewMatrix[10]);
-			roll = Math.atan2(viewMatrix[1], viewMatrix[0]);
-		} else {
-			// Gimbal lock occurred, set yaw to 0 and calculate roll
-			startYaw = 0;
-			roll = Math.atan2(-viewMatrix[4],  viewMatrix[5]);
-		}
-
-       //move camera to new position with current yaw and pitch
-		let inv = invert4(viewMatrix)
-		inv = translate4(inv, 0, 0, dist);
-		inv = rotate4(inv, startPitch, 1, 0, 0);
-		inv = rotate4(inv, -startYaw, 0, 1, 0);
-		inv = rotate4(inv, -Math.PI/2, 0, 0, 1);
-		inv = translate4(inv, -center[0],-center[1],-center[2]);
-		viewMatrix = multiply4(viewMatrix,inv);
-		
-		down = e.ctrlKey || e.metaKey ? 2 : 1;
+        down = e.button === 2 ? 2 : 1; // Right click = 2, Left click = 1
+        console.log("Mouse down:", e.button, "down =", down); // Debug
     });
     canvas.addEventListener("contextmenu", (e) => {
         carousel = false;
         e.preventDefault();
-        startX = e.clientX;
-        startY = e.clientY;
-        down = 2;
+        // Don't set down here, let mousedown handle it
+        // This prevents the contextmenu from interfering with mouse state
     });
 
     canvas.addEventListener("mousemove", (e) => {
         e.preventDefault();
+        // Only process if a mouse button is actually being held down
+        if (down === false) return;
+        
         if (down == 1) {
+            // Left click and drag - Pan (move camera position)
             let inv = invert4(viewMatrix);
-            let dx = (5 * (e.clientX - startX)) / innerWidth;
-            let dy = (5 * (e.clientY - startY)) / innerHeight;
-			
-			inv = translate4(inv, 0, 0, dist);
-			inv = rotate4(inv, dy+startPitch, 1, 0, 0);
-            inv = rotate4(inv, -dx-startYaw, 0, 1, 0);
-			inv = rotate4(inv, -Math.PI/2, 0, 0, 1);
-			inv = translate4(inv, -center[0],-center[1],-center[2]);
-			viewMatrix = multiply4(viewMatrix,inv);
-        } else if (down == 2) {
-            let inv = invert4(viewMatrix);
-            // inv = rotateY(inv, );
-            // let preY = inv[13];
-            inv = translate4(
-                inv,
-                (-10 * (e.clientX - startX)) / innerWidth,
-                0,
-                (10 * (e.clientY - startY)) / innerHeight,
-            );
-            // inv[13] = preY;
+            let dx = (10 * (e.clientX - startX)) / innerWidth;
+            let dy = (10 * (e.clientY - startY)) / innerHeight;
+            
+            inv = translate4(inv, -dx, -dy, 0);
             viewMatrix = invert4(inv);
+
+            startX = e.clientX;
+            startY = e.clientY;
+        } else if (down == 2) {
+            // Right click and drag - Rotate (change camera view direction)
+            let inv = invert4(viewMatrix);
+            let dx = (3 * (e.clientX - startX)) / innerWidth; // Reduced sensitivity
+            let dy = (3 * (e.clientY - startY)) / innerHeight; // Reduced sensitivity
+            let d = 4;
+
+            // Only apply rotation if there's actual movement
+            if (Math.abs(dx) > 0.001 || Math.abs(dy) > 0.001) {
+                console.log("Applying rotation: dx=", dx, "dy=", dy); // Debug
+                inv = translate4(inv, 0, 0, d);
+                inv = rotate4(inv, dx, 0, 1, 0);
+                inv = rotate4(inv, -dy, 1, 0, 0);
+                inv = translate4(inv, 0, 0, -d);
+                viewMatrix = invert4(inv);
+            }
 
             startX = e.clientX;
             startY = e.clientY;
@@ -1050,6 +1217,18 @@ async function main(sceneConfig) {
     });
     canvas.addEventListener("mouseup", (e) => {
         e.preventDefault();
+        console.log("Mouse up:", e.button, "down was:", down); // Debug
+        // Reset the down state when any mouse button is released
+        down = false;
+        startX = 0;
+        startY = 0;
+    });
+    
+    // Also handle mouse leaving the canvas
+    canvas.addEventListener("mouseleave", (e) => {
+        e.preventDefault();
+        console.log("Mouse leave, down was:", down); // Debug
+        // Reset the down state when mouse leaves the canvas
         down = false;
         startX = 0;
         startY = 0;
@@ -1063,30 +1242,6 @@ async function main(sceneConfig) {
             e.preventDefault();
             if (e.touches.length === 1) {
                 carousel = false;
-				
-				startPitch = Math.asin(-viewMatrix[2]);
-				let roll;
-
-				// Check for gimbal lock
-				if (Math.abs(viewMatrix[2]) < 0.99999) {
-					// Calculate yaw and roll (in radians)
-					startYaw = Math.atan2(viewMatrix[6],  viewMatrix[10]);
-					roll = Math.atan2(viewMatrix[1], viewMatrix[0]);
-				} else {
-					// Gimbal lock occurred, set yaw to 0 and calculate roll
-					startYaw = 0;
-					roll = Math.atan2(-viewMatrix[4],  viewMatrix[5]);
-				}
-
-			   //move camera to new position with current yaw and pitch
-				let inv = invert4(viewMatrix)
-				inv = translate4(inv, 0, 0, dist);
-				inv = rotate4(inv, startPitch, 1, 0, 0);
-				inv = rotate4(inv, -startYaw, 0, 1, 0);
-				inv = rotate4(inv, -Math.PI/2, 0, 0, 1);
-				inv = translate4(inv, -center[0],-center[1],-center[2]);
-				viewMatrix = multiply4(viewMatrix,inv);
-				
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
                 down = 1;
@@ -1111,13 +1266,18 @@ async function main(sceneConfig) {
                 let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
                 let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
 
-                inv = invert4(viewMatrix)
-				inv = translate4(inv, 0, 0, dist);
-				inv = rotate4(inv, dy+startPitch, 1, 0, 0);
-				inv = rotate4(inv, -dx-startYaw, 0, 1, 0);
-				inv = rotate4(inv, -Math.PI/2, 0, 0, 1);
-				inv = translate4(inv, -center[0],-center[1],-center[2]);
-				viewMatrix = multiply4(viewMatrix,inv);
+                let d = 4;
+                inv = translate4(inv, 0, 0, d);
+                // inv = translate4(inv,  -x, -y, -z);
+                // inv = translate4(inv,  x, y, z);
+                inv = rotate4(inv, dx, 0, 1, 0);
+                inv = rotate4(inv, -dy, 1, 0, 0);
+                inv = translate4(inv, 0, 0, -d);
+
+                viewMatrix = invert4(inv);
+
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
             } else if (e.touches.length === 2) {
                 // alert('beep')
                 const dtheta =
@@ -1191,12 +1351,13 @@ async function main(sceneConfig) {
     });
 
     let leftGamepadTrigger, rightGamepadTrigger;
-	
-	let dist = 4;
 
     const frame = (now) => {
         let inv = invert4(viewMatrix);
-        let shiftKey = activeKeys.includes("Shift") || activeKeys.includes("ShiftLeft") || activeKeys.includes("ShiftRight")
+        let shiftKey =
+            activeKeys.includes("Shift") ||
+            activeKeys.includes("ShiftLeft") ||
+            activeKeys.includes("ShiftRight");
 
         if (activeKeys.includes("ArrowUp")) {
             if (shiftKey) {
@@ -1218,25 +1379,23 @@ async function main(sceneConfig) {
         if (activeKeys.includes("ArrowRight"))
             inv = translate4(inv, 0.03, 0, 0);
         // inv = rotate4(inv, 0.01, 0, 1, 0);
-        if (activeKeys.includes("KeyA")) inv = rotate4(inv, -0.01, 0, 1, 0);
-        if (activeKeys.includes("KeyD")) inv = rotate4(inv, 0.01, 0, 1, 0);
+        if (activeKeys.includes("KeyA")) {
+            inv = translate4(inv, -0.03, 0, 0); // Left
+        }
+        if (activeKeys.includes("KeyD")) {
+            inv = translate4(inv, 0.03, 0, 0); // Right
+        }
         if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
         if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
-        if (activeKeys.includes("KeyW")) inv = rotate4(inv, 0.005, 1, 0, 0);
-        if (activeKeys.includes("KeyS")) inv = rotate4(inv, -0.005, 1, 0, 0);
-
-        if (activeKeys.includes("Comma")) {
-            playMovie=false;
-            advance_frame();
+        if (activeKeys.includes("KeyW")) {
+            inv = translate4(inv, 0, 0, 0.1); // Forward
         }
-
-        if (activeKeys.includes("Period")) {
-            playMovie=false;
-            retard_frame();
+        if (activeKeys.includes("KeyS")) {
+            inv = translate4(inv, 0, 0, -0.1); // Backward
         }
 
         const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-        let isJumping = activeKeys.includes("Delete");
+        let isJumping = activeKeys.includes("Space");
         for (let gamepad of gamepads) {
             if (!gamepad) continue;
 
@@ -1253,13 +1412,27 @@ async function main(sceneConfig) {
                 inv = translate4(inv, 0, 0, -moveSpeed * gamepad.axes[1]);
                 carousel = false;
             }
-            if(gamepad.buttons[12].pressed || gamepad.buttons[13].pressed){
-                inv = translate4(inv, 0, -moveSpeed*(gamepad.buttons[12].pressed - gamepad.buttons[13].pressed), 0);
+            if (gamepad.buttons[12].pressed || gamepad.buttons[13].pressed) {
+                inv = translate4(
+                    inv,
+                    0,
+                    -moveSpeed *
+                        (gamepad.buttons[12].pressed -
+                            gamepad.buttons[13].pressed),
+                    0,
+                );
                 carousel = false;
             }
 
-            if(gamepad.buttons[14].pressed || gamepad.buttons[15].pressed){
-                inv = translate4(inv, -moveSpeed*(gamepad.buttons[14].pressed - gamepad.buttons[15].pressed), 0, 0);
+            if (gamepad.buttons[14].pressed || gamepad.buttons[15].pressed) {
+                inv = translate4(
+                    inv,
+                    -moveSpeed *
+                        (gamepad.buttons[14].pressed -
+                            gamepad.buttons[15].pressed),
+                    0,
+                    0,
+                );
                 carousel = false;
             }
 
@@ -1279,19 +1452,27 @@ async function main(sceneConfig) {
                 carousel = false;
             }
             if (gamepad.buttons[4].pressed && !leftGamepadTrigger) {
-                advance_frame()
+                camera =
+                    cameras[(cameras.indexOf(camera) + 1) % cameras.length];
+                inv = invert4(getViewMatrix(camera));
                 carousel = false;
             }
             if (gamepad.buttons[5].pressed && !rightGamepadTrigger) {
-                retard_frame();
+                camera =
+                    cameras[
+                        (cameras.indexOf(camera) + cameras.length - 1) %
+                            cameras.length
+                    ];
+                inv = invert4(getViewMatrix(camera));
                 carousel = false;
             }
             leftGamepadTrigger = gamepad.buttons[4].pressed;
             rightGamepadTrigger = gamepad.buttons[5].pressed;
             if (gamepad.buttons[0].pressed) {
-                playMovie=!playMovie;
+                isJumping = true;
+                carousel = false;
             }
-            if(gamepad.buttons[3].pressed){
+            if (gamepad.buttons[3].pressed) {
                 carousel = true;
             }
         }
@@ -1306,8 +1487,8 @@ async function main(sceneConfig) {
                 activeKeys.includes("KeyJ")
                     ? -0.05
                     : activeKeys.includes("KeyL")
-                    ? 0.05
-                    : 0,
+                      ? 0.05
+                      : 0,
                 0,
                 1,
                 0,
@@ -1317,8 +1498,8 @@ async function main(sceneConfig) {
                 activeKeys.includes("KeyI")
                     ? 0.05
                     : activeKeys.includes("KeyK")
-                    ? -0.05
-                    : 0,
+                      ? -0.05
+                      : 0,
                 1,
                 0,
                 0,
@@ -1326,17 +1507,16 @@ async function main(sceneConfig) {
             inv = translate4(inv, 0, 0, -d);
         }
 
-		dist = Math.hypot(inv[12]-center[0],inv[13]-center[1],inv[14]-center[2]);
         viewMatrix = invert4(inv);
 
         if (carousel) {
-            const t = Math.sin((Date.now() - start) / 2000)-rotOff;
-			
-            inv = translate4(inv, 0, 0, dist);
-            inv = rotate4(inv, t, 0, 1, 0);
-			inv = rotate4(inv, -Math.PI/2, 0, 0, 1);
-			inv = translate4(inv, -center[0],-center[1],-center[2]);
-			viewMatrix = multiply4(viewMatrix,inv);
+            let inv = invert4(defaultViewMatrix);
+
+            const t = Math.sin((Date.now() - start) / 5000);
+            inv = translate4(inv, 2.5 * t, 0, 6 * (1 - Math.cos(t)));
+            inv = rotate4(inv, -0.6 * t, 0, 1, 0);
+
+            viewMatrix = invert4(inv);
         }
 
         if (isJumping) {
@@ -1351,39 +1531,10 @@ async function main(sceneConfig) {
         let actualViewMatrix = invert4(inv2);
 
         const viewProj = multiply4(projectionMatrix, actualViewMatrix);
-        
+        worker.postMessage({ view: viewProj });
 
         const currentFps = 1000 / (now - lastFrame) || 0;
         avgFps = avgFps * 0.9 + currentFps * 0.1;
-
-//*********************************************************
-
-		if(mfirstframe){
-			mfirstframe=false;
-			advance_frame();
-			lastmFrame = now;  // Initialize timing
-		}
-		
-		if(mfullyloaded) {
-			if ((now - lastmFrame)>mframerate && playMovie ) {
-				advance_frame();
-				lastmFrame = now;
-			}
-		} else {
-			if(texCache[mframe-1]==null || texCache[mframe-1]==0){
-				//waiting for frame
-			} else {
-				advance_frame();
-			}
-		}
-		
-		if (pauseRender) {
-			lastFrame = now;
-			requestAnimationFrame(frame);
-			return;
-		}
-//*********************************************************
-		worker.postMessage({ view: viewProj });
 
         if (vertexCount > 0) {
             document.getElementById("spinner").style.display = "none";
@@ -1401,24 +1552,56 @@ async function main(sceneConfig) {
         } else {
             document.getElementById("progress").style.display = "none";
         }
-		if(mfullyloaded)
-			fps.innerText = Math.round(avgFps) + " fps";
-		else
-			fps.innerText = "Loading " + mframe + "/" + mNumFrames;
-        if (isNaN(currentCameraIndex)){
+        fps.innerText = Math.round(avgFps) + " fps";
+        if (isNaN(currentCameraIndex)) {
             camid.innerText = "";
         }
+        
+        // Sequence timing logic
+        if (isPlayingSequence && sequenceFiles.length > 0) {
+            const frameInterval = 1000 / sequenceFrameRate;
+            if (now - lastFrameTime >= frameInterval) {
+                advance_frame();
+                lastFrameTime = now;
+                
+                // Update camera info to show sequence progress
+                if (!isNaN(currentCameraIndex)) {
+                    camid.innerText = `seq ${mframe}/${mNumFrames}`;
+                }
+            }
+        }
+        
+        // Initialize first frame if sequence is loaded
+        if (mfirstframe && sequenceFiles.length > 0) {
+            mfirstframe = false;
+            advance_frame();
+        }
+        
+        // Handle sequence playback timing
+        if (mfullyloaded && isPlayingSequence) {
+            if ((now - lastmFrame) > mframerate) {
+                advance_frame();
+                lastmFrame = now;
+            }
+        } else if (sequenceFiles.length > 0 && !mfullyloaded) {
+            if (texCache[mframe - 1] == null || texCache[mframe - 1] == 0) {
+                // waiting for frame
+            } else {
+                advance_frame();
+            }
+        }
+        
         lastFrame = now;
         requestAnimationFrame(frame);
     };
 
     frame();
 
-	const selectFileWithCache = (blob,frameid) => {
-		selectFile(blob);
-		texCache[frameid-1]=blob;
-		mLoadedFrames=mLoadedFrames+1;
-	}
+    const isPly = (splatData) =>
+        splatData[0] == 112 &&
+        splatData[1] == 108 &&
+        splatData[2] == 121 &&
+        splatData[3] == 10;
 
     const selectFile = (file) => {
         const fr = new FileReader();
@@ -1438,18 +1621,14 @@ async function main(sceneConfig) {
             };
             fr.readAsText(file);
         } else {
+            stopLoading = true;
             fr.onload = () => {
                 splatData = new Uint8Array(fr.result);
-                //console.log("Loaded", Math.floor(splatData.length / rowLength));
+                console.log("Loaded", Math.floor(splatData.length / rowLength));
 
-                if (
-                    splatData[0] == 112 &&
-                    splatData[1] == 108 &&
-                    splatData[2] == 121 &&
-                    splatData[3] == 10
-                ) {
+                if (isPly(splatData)) {
                     // ply file magic header means it should be handled differently
-                    worker.postMessage({ ply: splatData.buffer });
+                    worker.postMessage({ ply: splatData.buffer, save: true });
                 } else {
                     worker.postMessage({
                         buffer: splatData.buffer,
@@ -1458,6 +1637,87 @@ async function main(sceneConfig) {
                 }
             };
             fr.readAsArrayBuffer(file);
+        }
+    };
+
+    // Function to handle folder selection and create sequence
+    const handleFolderSelection = async (items) => {
+        console.log("handleFolderSelection called with items:", items);
+        const splatFiles = [];
+        
+        // Recursively scan for .splat files
+        const scanForSplatFiles = async (item) => {
+            try {
+                console.log("Scanning item:", item.name, "isFile:", item.isFile, "isDirectory:", item.isDirectory);
+                
+                if (item.isFile) {
+                    const file = await new Promise((resolve, reject) => {
+                        item.file(resolve, reject);
+                    });
+                    console.log("Found file:", file.name);
+                    
+                    if (/\.splat$/i.test(file.name)) {
+                        console.log("Found .splat file:", file.name);
+                        splatFiles.push({
+                            name: file.name,
+                            file: file,
+                            url: URL.createObjectURL(file)
+                        });
+                    }
+                } else if (item.isDirectory) {
+                    console.log("Scanning directory:", item.name);
+                    const reader = item.createReader();
+                    const entries = await new Promise((resolve, reject) => {
+                        reader.readEntries(resolve, reject);
+                    });
+                    console.log("Directory entries:", entries);
+                    
+                    for (const entry of entries) {
+                        await scanForSplatFiles(entry);
+                    }
+                }
+            } catch (error) {
+                console.error("Error scanning item:", item.name, error);
+            }
+        };
+
+        // Process all items
+        for (const item of items) {
+            await scanForSplatFiles(item);
+        }
+
+        console.log("Total .splat files found:", splatFiles.length);
+
+        // Sort files by name (natural sort)
+        splatFiles.sort((a, b) => {
+            return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        if (splatFiles.length > 0) {
+            console.log(`Found ${splatFiles.length} .splat files in folder:`, splatFiles.map(f => f.name));
+            
+            // Create sequence from local files
+            sequenceFiles = splatFiles.map(f => f.url);
+            mNumFrames = sequenceFiles.length;
+            texCache = new Array(mNumFrames).fill(null);
+            isPlayingSequence = true;
+            mLoadedFrames = 0;
+            mfullyloaded = false;
+            mfirstframe = true;
+            mframe = 1;
+            
+            console.log("Sequence created with", mNumFrames, "frames");
+            
+            // Load the first frame
+            if (mfirstframe) {
+                mfirstframe = false;
+                advance_frame();
+            }
+            
+            camid.innerText = `Loaded ${mNumFrames} files from folder`;
+        } else {
+            console.log("No .splat files found in folder");
+            camid.innerText = "No .splat files found";
         }
     };
 
@@ -1478,8 +1738,104 @@ async function main(sceneConfig) {
     document.addEventListener("drop", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        selectFile(e.dataTransfer.files[0]);
+        
+        console.log("Drop event triggered");
+        console.log("DataTransfer items:", e.dataTransfer.items);
+        console.log("DataTransfer files:", e.dataTransfer.files);
+        
+        const items = e.dataTransfer.items;
+        if (items && items.length > 0) {
+            // Check if it's a folder (has directory items)
+            let hasDirectory = false;
+            let entries = [];
+            
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                console.log(`Item ${i}:`, item);
+                
+                if (item.webkitGetAsEntry) {
+                    const entry = item.webkitGetAsEntry();
+                    console.log(`Entry ${i}:`, entry);
+                    
+                    if (entry) {
+                        if (entry.isDirectory) {
+                            hasDirectory = true;
+                            console.log("Found directory:", entry.name);
+                        }
+                        entries.push(entry);
+                    }
+                }
+            }
+            
+            if (hasDirectory) {
+                console.log("Processing folder drop with entries:", entries);
+                // Handle folder drop
+                handleFolderSelection(entries);
+            } else {
+                console.log("Processing single file drop");
+                // Handle single file drop
+                if (e.dataTransfer.files.length > 0) {
+                    selectFile(e.dataTransfer.files[0]);
+                }
+            }
+        } else if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            console.log("Processing files drop (fallback)");
+            // Fallback for older browsers or when items is not available
+            selectFile(e.dataTransfer.files[0]);
+        } else {
+            console.log("No valid drop data found");
+        }
     });
+
+    // Add file input handler for folder selection
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                console.log('Folder selected, total files:', files.length);
+                console.log('File input selected files:', files.map(f => f.name));
+                
+                // Filter for .splat files
+                const splatFiles = files.filter(file => /\.splat$/i.test(file.name));
+                
+                if (splatFiles.length > 0) {
+                    console.log('Found .splat files in folder:', splatFiles.map(f => f.name));
+                    
+                    // Sort files by name (natural sort)
+                    splatFiles.sort((a, b) => {
+                        return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+                    });
+                    
+                    // Create sequence from selected files
+                    sequenceFiles = splatFiles.map(f => URL.createObjectURL(f));
+                    mNumFrames = sequenceFiles.length;
+                    texCache = new Array(mNumFrames).fill(null);
+                    isPlayingSequence = true;
+                    mLoadedFrames = 0;
+                    mfullyloaded = false;
+                    mfirstframe = true;
+                    mframe = 1;
+                    
+                    console.log('Sequence created with', mNumFrames, 'frames from folder selection');
+                    
+                    // Load the first frame
+                    if (mfirstframe) {
+                        mfirstframe = false;
+                        advance_frame();
+                    }
+                    
+                    camid.innerText = `Loaded ${mNumFrames} files from folder`;
+                } else {
+                    console.log('No .splat files found in selected folder');
+                    camid.innerText = 'No .splat files found in folder';
+                }
+            } else {
+                console.log('No files selected');
+                camid.innerText = 'No folder selected';
+            }
+        });
+    }
 
     let bytesRead = 0;
     let lastVertexCount = -1;
@@ -1493,21 +1849,29 @@ async function main(sceneConfig) {
         bytesRead += value.length;
 
         if (vertexCount > lastVertexCount) {
+            if (!isPly(splatData)) {
+                worker.postMessage({
+                    buffer: splatData.buffer,
+                    vertexCount: Math.floor(bytesRead / rowLength),
+                });
+            }
+            lastVertexCount = vertexCount;
+        }
+    }
+    if (!stopLoading) {
+        if (isPly(splatData)) {
+            // ply file magic header means it should be handled differently
+            worker.postMessage({ ply: splatData.buffer, save: false });
+        } else {
             worker.postMessage({
                 buffer: splatData.buffer,
                 vertexCount: Math.floor(bytesRead / rowLength),
             });
-            lastVertexCount = vertexCount;
         }
     }
-    if (!stopLoading)
-        worker.postMessage({
-            buffer: splatData.buffer,
-            vertexCount: Math.floor(bytesRead / rowLength),
-        });
 }
 
-loadConfig().then(data => {main(data).catch((err) => {
+main().catch((err) => {
     document.getElementById("spinner").style.display = "none";
-    //document.getElementById("message").innerText = err.toString();
-})});
+    document.getElementById("message").innerText = err.toString();
+});
