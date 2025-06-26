@@ -756,7 +756,7 @@ async function main() {
     let mfullyloaded = false;
     let mfirstframe = true;
     let mLoadedFrames = 0;
-    let mframerate = 1000.0 / 30; // 30 fps default
+
     
     const params = new URLSearchParams(location.search);
     try {
@@ -1123,18 +1123,7 @@ async function main() {
                 // Next frame
                 advance_frame();
                 camid.innerText = `seq ${mframe}/${mNumFrames}`;
-            } else if (e.code === "BracketLeft") {
-                // Decrease frame rate
-                sequenceFrameRate = Math.max(1, sequenceFrameRate - 5);
-                mframerate = 1000.0 / sequenceFrameRate;
-                console.log(`Frame rate: ${sequenceFrameRate} fps`);
-                camid.innerText = `${sequenceFrameRate} fps`;
-            } else if (e.code === "BracketRight") {
-                // Increase frame rate
-                sequenceFrameRate = Math.min(60, sequenceFrameRate + 5);
-                mframerate = 1000.0 / sequenceFrameRate;
-                console.log(`Frame rate: ${sequenceFrameRate} fps`);
-                camid.innerText = `${sequenceFrameRate} fps`;
+
             } else if (e.code === "KeyL") {
                 // Toggle loop
                 sequenceLoop = !sequenceLoop;
