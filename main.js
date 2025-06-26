@@ -600,9 +600,53 @@ let defaultViewMatrix = [
     0.03, 6.55, 1,
 ];
 let viewMatrix = defaultViewMatrix;
-async function main() {
+
+async function loadConfig() {
+    try {
+        const response = await fetch("splats/scene.json");
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching scene.json:', error);
+        return null;
+    }
+}
+
+async function main(sceneConfig) {
     let carousel = false;
     let vertexCount = 0;
+    
+    // Apply scene.json configuration
+    if (sceneConfig) {
+        console.log("Loading scene configuration:", sceneConfig);
+        
+        if ("viewMatrix" in sceneConfig) {
+            viewMatrix = sceneConfig.viewMatrix;
+            if (viewMatrix.length != 16) {
+                console.error('viewMatrix must have 16 elements');
+                return;
+            }
+            console.log("Applied viewMatrix from scene.json");
+        }
+        
+        if ("framerate" in sceneConfig) {
+            mframerate = 1000.0 / sceneConfig.framerate;
+            console.log("Set framerate to", sceneConfig.framerate, "fps");
+        }
+        
+        if ("numFrames" in sceneConfig) {
+            mNumFrames = sceneConfig.numFrames;
+            console.log("Set numFrames to", mNumFrames);
+        }
+        
+        if ("carouselOnLoad" in sceneConfig) {
+            carousel = sceneConfig.carouselOnLoad;
+            console.log("Set carousel to", carousel);
+        }
+    }
     
         // Animation variables (following reference implementation)
     let mframe = 1;
@@ -1354,7 +1398,9 @@ async function main() {
 
 }
 
-main().catch((err) => {
-    document.getElementById("spinner").style.display = "none";
-    document.getElementById("message").innerText = err.toString();
+loadConfig().then(data => {
+    main(data).catch((err) => {
+        document.getElementById("spinner").style.display = "none";
+        document.getElementById("message").innerText = err.toString();
+    });
 });
