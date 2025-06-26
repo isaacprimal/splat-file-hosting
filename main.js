@@ -419,6 +419,7 @@ function createWorker(self) {
 
     function runSort(viewProj) {
         if (!buffer) return;
+        if (buffer.byteLength % 4 !== 0) return;
         const f_buffer = new Float32Array(buffer);
         if (lastVertexCount == vertexCount) {
             let dot =
@@ -738,6 +739,7 @@ let defaultViewMatrix = [
 let viewMatrix = defaultViewMatrix;
 async function main() {
     let carousel = false;
+    let vertexCount = 0;
     
     // Sequence playback variables
     let sequenceFiles = [];
@@ -1334,7 +1336,6 @@ async function main() {
     );
 
     let jumpDelta = 0;
-    let vertexCount = 0;
 
     let lastFrame = 0;
     let avgFps = 0;
