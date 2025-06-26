@@ -811,10 +811,8 @@ async function main() {
             }
             
             const reader = req.body.getReader();
-            const contentLength = parseInt(req.headers.get("content-length")) || 0;
-            // Start with content-length or fallback to 2MB if header is missing
-            const initialSize = contentLength > 0 ? contentLength : 2 * 1024 * 1024;
-            splatData = new Uint8Array(initialSize);
+            // Start with 3MB buffer to handle all splat file sizes reliably
+            splatData = new Uint8Array(3 * 1024 * 1024);
             
             let bytesRead = 0;
             let lastVertexCount = -1;
@@ -826,11 +824,8 @@ async function main() {
                 
                 // Check bounds before setting data
                 if (bytesRead + value.length > splatData.length) {
-                    console.warn(`Buffer overflow prevented: ${bytesRead + value.length} > ${splatData.length}`);
-                    // Resize buffer if needed
-                    const newBuffer = new Uint8Array(bytesRead + value.length);
-                    newBuffer.set(splatData.subarray(0, bytesRead), 0);
-                    splatData = newBuffer;
+                    console.error(`Splat file too large: ${bytesRead + value.length} bytes > 3MB buffer`);
+                    break; // Skip this file if it's too large
                 }
                 
                 splatData.set(value, bytesRead);
@@ -849,15 +844,20 @@ async function main() {
             }
             
             if (!stopLoading) {
-                if (isPly(splatData)) {
+                // Trim buffer to actual data size
+                const trimmedData = splatData.slice(0, bytesRead);
+                
+                if (isPly(trimmedData)) {
                     // ply file magic header means it should be handled differently
-                    worker.postMessage({ ply: splatData.buffer, save: false });
+                    worker.postMessage({ ply: trimmedData.buffer, save: false });
                 } else {
                     worker.postMessage({
-                        buffer: splatData.buffer,
+                        buffer: trimmedData.buffer,
                         vertexCount: Math.floor(bytesRead / rowLength),
                     });
                 }
+                
+                console.log(`Loaded frame ${currentSequenceIndex + 1}: ${bytesRead} bytes`);
             }
             
             // Update sequence index
@@ -872,7 +872,11 @@ async function main() {
 
     // Load first sequence file if sequence is provided
     if (sequenceFiles.length > 0) {
+        console.log("Starting sequence loading...");
         await loadNextSequenceFile();
+        // Start animation playback after first frame loads
+        isPlayingSequence = true;
+        console.log("Sequence animation started");
     }
 
     worker.onmessage = (e) => {
@@ -1391,9 +1395,14 @@ async function main() {
                 advance_frame();
                 lastFrameTime = now;
                 
-                // Update camera info to show sequence progress
+                // Update info to show sequence progress
                 camid.innerText = `seq ${mframe}/${mNumFrames} (${sequenceFrameRate}fps)`;
             }
+        }
+        
+        // Initialize timing on first frame
+        if (lastFrameTime === 0 && sequenceFiles.length > 0) {
+            lastFrameTime = now;
         }
         
         // Initialize first frame if sequence is loaded
