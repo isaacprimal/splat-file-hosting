@@ -302,10 +302,15 @@ function createWorker(self) {
         let minDepth = Infinity;
         let sizeList = new Int32Array(vertexCount);
         for (let i = 0; i < vertexCount; i++) {
+            // Apply same 180 degree Y-axis rotation for depth sorting
+            let rotatedX = -f_buffer[8 * i + 0]; // X becomes -X
+            let rotatedY = f_buffer[8 * i + 1];  // Y stays Y  
+            let rotatedZ = -f_buffer[8 * i + 2]; // Z becomes -Z
+            
             let depth =
-                ((viewProj[2] * f_buffer[8 * i + 0] +
-                    viewProj[6] * f_buffer[8 * i + 1] +
-                    viewProj[10] * f_buffer[8 * i + 2]) *
+                ((viewProj[2] * rotatedX +
+                    viewProj[6] * rotatedY +
+                    viewProj[10] * rotatedZ) *
                     4096) |
                 0;
             sizeList[i] = depth;
