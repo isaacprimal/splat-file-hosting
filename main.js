@@ -959,8 +959,10 @@ async function main() {
             }
             
             const reader = req.body.getReader();
-            const contentLength = parseInt(req.headers.get("content-length"));
-            splatData = new Uint8Array(contentLength);
+            const contentLength = parseInt(req.headers.get("content-length")) || 0;
+            // Start with content-length or fallback to 2MB if header is missing
+            const initialSize = contentLength > 0 ? contentLength : 2 * 1024 * 1024;
+            splatData = new Uint8Array(initialSize);
             
             let bytesRead = 0;
             let lastVertexCount = -1;
@@ -969,6 +971,15 @@ async function main() {
             while (true) {
                 const { done, value } = await reader.read();
                 if (done || stopLoading) break;
+                
+                // Check bounds before setting data
+                if (bytesRead + value.length > splatData.length) {
+                    console.warn(`Buffer overflow prevented: ${bytesRead + value.length} > ${splatData.length}`);
+                    // Resize buffer if needed
+                    const newBuffer = new Uint8Array(bytesRead + value.length);
+                    newBuffer.set(splatData.subarray(0, bytesRead), 0);
+                    splatData = newBuffer;
+                }
                 
                 splatData.set(value, bytesRead);
                 bytesRead += value.length;
