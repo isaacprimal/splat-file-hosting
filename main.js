@@ -616,6 +616,7 @@ async function main() {
     let mNumFrames = 299;
     let playMovie = true;
     let texCache = null;
+    let pauseRender = false;
 
     
     const params = new URLSearchParams(location.search);
@@ -797,6 +798,7 @@ async function main() {
                 link.click();
             }
         } else if (e.data.texdata) {
+            pauseRender = true;
             const { texdata, texwidth, texheight } = e.data;
             // console.log(texdata)
             gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -831,6 +833,7 @@ async function main() {
             gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, depthIndex, gl.DYNAMIC_DRAW);
             vertexCount = e.data.vertexCount;
+            pauseRender = false;
         }
     };
 
@@ -1241,6 +1244,31 @@ async function main() {
             viewMatrix = invert4(inv);
         }
 
+        // Animation timing logic (MUST BE BEFORE RENDERING)
+        if (mfirstframe) {
+            mfirstframe = false;
+            advance_frame();
+        }
+        
+        if (mfullyloaded) {
+            if ((now - lastmFrame) > mframerate && playMovie) {
+                advance_frame();
+                lastmFrame = now;
+            }
+        } else {
+            if (texCache[mframe - 1] == null || texCache[mframe - 1] == 0) {
+                // waiting for frame
+            } else {
+                advance_frame();
+            }
+        }
+
+        if (pauseRender) {
+            lastFrame = now;
+            requestAnimationFrame(frame);
+            return;
+        }
+
         if (isJumping) {
             jumpDelta = Math.min(1, jumpDelta + 0.05);
         } else {
@@ -1280,25 +1308,6 @@ async function main() {
             fps.innerText = "Loading " + mframe + "/" + mNumFrames;
         if (isNaN(currentCameraIndex)) {
             camid.innerText = "";
-        }
-        
-        // Animation timing logic (from reference implementation)
-        if (mfirstframe) {
-            mfirstframe = false;
-            advance_frame();
-        }
-        
-        if (mfullyloaded) {
-            if ((now - lastmFrame) > mframerate && playMovie) {
-                advance_frame();
-                lastmFrame = now;
-            }
-        } else {
-            if (texCache[mframe - 1] == null || texCache[mframe - 1] == 0) {
-                // waiting for frame
-            } else {
-                advance_frame();
-            }
         }
         
         lastFrame = now;
