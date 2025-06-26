@@ -347,6 +347,7 @@ function createWorker(self) {
 
     function generateTexture() {
         if (!buffer) return;
+        if (buffer.byteLength % 4 !== 0) return;
         const f_buffer = new Float32Array(buffer);
         const u_buffer = new Uint8Array(buffer);
 
@@ -972,14 +973,15 @@ async function main() {
                 splatData.set(value, bytesRead);
                 bytesRead += value.length;
                 
-                if (vertexCount > lastVertexCount) {
+                const currentVertexCount = Math.floor(bytesRead / rowLength);
+                if (currentVertexCount > lastVertexCount) {
                     if (!isPly(splatData)) {
                         worker.postMessage({
                             buffer: splatData.buffer,
-                            vertexCount: Math.floor(bytesRead / rowLength),
+                            vertexCount: currentVertexCount,
                         });
                     }
-                    lastVertexCount = vertexCount;
+                    lastVertexCount = currentVertexCount;
                 }
             }
             
