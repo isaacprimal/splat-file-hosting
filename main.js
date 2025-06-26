@@ -764,6 +764,13 @@ async function main() {
         carousel = false;
     } catch (err) {}
     
+    // Define isPly function early to avoid initialization errors
+    const isPly = (splatData) =>
+        splatData[0] == 112 &&
+        splatData[1] == 108 &&
+        splatData[2] == 121 &&
+        splatData[3] == 10;
+
     // Setup hardcoded sequence files from GitHub
     const baseUrl = "https://isaacprimal.github.io/splat-file-hosting/splats/";
     for (let i = 1; i <= 299; i++) {
@@ -778,27 +785,10 @@ async function main() {
         console.log(`Loaded sequence with ${mNumFrames} files`);
     }
     
-    const url = new URL(
-        // "nike.splat",
-        // location.href,
-        params.get("url") || "train.splat",
-        "https://huggingface.co/cakewalk/splat-data/resolve/main/",
-    );
-    const req = await fetch(url, {
-        mode: "cors", // no-cors, *cors, same-origin
-        credentials: "omit", // include, *same-origin, omit
-    });
-    console.log(req);
-    if (req.status != 200)
-        throw new Error(req.status + " Unable to load " + req.url);
-
     const rowLength = 3 * 4 + 3 * 4 + 4 + 4;
-    const reader = req.body.getReader();
-    let splatData = new Uint8Array(req.headers.get("content-length"));
+    let splatData = new Uint8Array(0); // Initialize empty, will be set by sequence loading
 
-    const downsample =
-        splatData.length / rowLength > 500000 ? 1 : 1 / devicePixelRatio;
-    console.log(splatData.length / rowLength, downsample);
+    const downsample = 1 / devicePixelRatio; // Default downsample since we don't have initial data
 
     const worker = new Worker(
         URL.createObjectURL(
@@ -1585,12 +1575,6 @@ async function main() {
 
     frame();
 
-    const isPly = (splatData) =>
-        splatData[0] == 112 &&
-        splatData[1] == 108 &&
-        splatData[2] == 121 &&
-        splatData[3] == 10;
-
     const selectFile = (file) => {
         const fr = new FileReader();
         if (/\.json$/i.test(file.name)) {
@@ -1639,38 +1623,6 @@ async function main() {
 
 
 
-    let bytesRead = 0;
-    let lastVertexCount = -1;
-    let stopLoading = false;
-
-    while (true) {
-        const { done, value } = await reader.read();
-        if (done || stopLoading) break;
-
-        splatData.set(value, bytesRead);
-        bytesRead += value.length;
-
-        if (vertexCount > lastVertexCount) {
-            if (!isPly(splatData)) {
-                worker.postMessage({
-                    buffer: splatData.buffer,
-                    vertexCount: Math.floor(bytesRead / rowLength),
-                });
-            }
-            lastVertexCount = vertexCount;
-        }
-    }
-    if (!stopLoading) {
-        if (isPly(splatData)) {
-            // ply file magic header means it should be handled differently
-            worker.postMessage({ ply: splatData.buffer, save: false });
-        } else {
-            worker.postMessage({
-                buffer: splatData.buffer,
-                vertexCount: Math.floor(bytesRead / rowLength),
-            });
-        }
-    }
 }
 
 main().catch((err) => {
