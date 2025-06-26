@@ -746,7 +746,7 @@ async function main() {
     let sequenceFiles = [];
     let currentSequenceIndex = 0;
     let isPlayingSequence = false;
-    let sequenceFrameRate = 30; // fps
+    let sequenceFrameRate = 60; // fps - matches splat file creation rate
     let lastFrameTime = 0;
     let sequenceLoop = true;
     let texCache = null;
@@ -1571,7 +1571,7 @@ async function main() {
             camid.innerText = "";
         }
         
-        // Sequence timing logic
+        // Sequence timing logic - single timing system
         if (isPlayingSequence && sequenceFiles.length > 0) {
             const frameInterval = 1000 / sequenceFrameRate;
             if (now - lastFrameTime >= frameInterval) {
@@ -1579,30 +1579,15 @@ async function main() {
                 lastFrameTime = now;
                 
                 // Update camera info to show sequence progress
-                if (!isNaN(currentCameraIndex)) {
-                    camid.innerText = `seq ${mframe}/${mNumFrames}`;
-                }
+                camid.innerText = `seq ${mframe}/${mNumFrames} (${sequenceFrameRate}fps)`;
             }
         }
         
         // Initialize first frame if sequence is loaded
         if (mfirstframe && sequenceFiles.length > 0) {
             mfirstframe = false;
+            lastFrameTime = now; // Initialize timing
             advance_frame();
-        }
-        
-        // Handle sequence playback timing
-        if (mfullyloaded && isPlayingSequence) {
-            if ((now - lastmFrame) > mframerate) {
-                advance_frame();
-                lastmFrame = now;
-            }
-        } else if (sequenceFiles.length > 0 && !mfullyloaded) {
-            if (texCache[mframe - 1] == null || texCache[mframe - 1] == 0) {
-                // waiting for frame
-            } else {
-                advance_frame();
-            }
         }
         
         lastFrame = now;
