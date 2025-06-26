@@ -604,20 +604,16 @@ async function main() {
     let carousel = false;
     let vertexCount = 0;
     
-    // Sequence playback variables
-    let sequenceFiles = [];
-    let currentSequenceIndex = 0;
-    let isPlayingSequence = false;
-    let sequenceFrameRate = 60; // fps - matches splat file creation rate
-    let lastFrameTime = 0;
-    let sequenceLoop = true;
-    let texCache = null;
-    let mNumFrames = 0;
+        // Animation variables (following reference implementation)
     let mframe = 1;
     let lastmFrame = 0;
     let mfullyloaded = false;
-
+    let mfirstframe = true;
     let mLoadedFrames = 0;
+    let mframerate = 1000.0 / 60; // 60 fps -> 16.67ms per frame
+    let mNumFrames = 299;
+    let playMovie = true;
+    let texCache = null;
 
     
     const params = new URLSearchParams(location.search);
@@ -626,19 +622,9 @@ async function main() {
         carousel = false;
     } catch (err) {}
     
-    // Setup hardcoded sequence files from GitHub
-    const baseUrl = "https://isaacprimal.github.io/splat-file-hosting/splats/";
-    for (let i = 1; i <= 299; i++) {
-        const frameNumber = i.toString().padStart(5, '0');
-        sequenceFiles.push(`${baseUrl}frame_${frameNumber}.splat`);
-    }
-    
-    if (sequenceFiles.length > 0) {
-        mNumFrames = sequenceFiles.length;
-        texCache = new Array(mNumFrames).fill(null);
-        isPlayingSequence = true;
-        console.log(`Loaded sequence with ${mNumFrames} files`);
-    }
+    // Initialize animation cache
+    texCache = new Array(mNumFrames).fill(null);
+    console.log(`Initialized animation with ${mNumFrames} frames`);
     
     // Define isPly function for sequence loading
     const isPly = (splatData) =>
@@ -771,7 +757,7 @@ async function main() {
     const load_frame = () => {
         if (texCache[mframe - 1] == null) {
             texCache[mframe - 1] = 0;
-            let url = sequenceFiles[mframe - 1];
+            let url = `https://isaacprimal.github.io/splat-file-hosting/splats/frame_${mframe.toString().padStart(5, '0')}.splat`;
             fetch(url).then((response) => response.blob()).then((blob) => selectFileWithCache(blob, mframe));
             console.log("loading frame " + mframe + " from web");
         } else if (texCache[mframe - 1] != 0) {
@@ -793,14 +779,7 @@ async function main() {
         mLoadedFrames = mLoadedFrames + 1;
     };
 
-    // Start animation playback immediately - frames will load on demand
-    if (sequenceFiles.length > 0) {
-        console.log("Starting sequence animation...");
-        isPlayingSequence = true;
-        // Load first frame
-        load_frame();
-        console.log("Sequence animation started");
-    }
+    console.log("Animation system initialized");
 
     worker.onmessage = (e) => {
         if (e.data.buffer) {
@@ -873,28 +852,18 @@ async function main() {
             camid.innerText = "";
         }
         
-        // Sequence playback controls
-        if (sequenceFiles.length > 0) {
-            if (e.code === "Space") {
-                // Toggle sequence playback
-                isPlayingSequence = !isPlayingSequence;
-                console.log(`Sequence playback ${isPlayingSequence ? 'started' : 'paused'}`);
-                camid.innerText = `seq ${isPlayingSequence ? 'play' : 'pause'}`;
-            } else if (e.code === "ArrowLeft") {
-                // Previous frame
-                retard_frame();
-                camid.innerText = `seq ${mframe}/${mNumFrames}`;
-            } else if (e.code === "ArrowRight") {
-                // Next frame
-                advance_frame();
-                camid.innerText = `seq ${mframe}/${mNumFrames}`;
-
-            } else if (e.code === "KeyL") {
-                // Toggle loop
-                sequenceLoop = !sequenceLoop;
-                console.log(`Loop ${sequenceLoop ? 'enabled' : 'disabled'}`);
-                camid.innerText = `loop ${sequenceLoop ? 'on' : 'off'}`;
-            }
+        // Animation controls (following reference implementation)
+        if (e.key === ' ') {
+            playMovie = !playMovie;
+            console.log(`Animation ${playMovie ? 'playing' : 'paused'}`);
+        }
+        if (e.key === ',') {
+            playMovie = false;
+            advance_frame();
+        }
+        if (e.key === '.') {
+            playMovie = false;
+            retard_frame();
         }
     });
     window.addEventListener("keyup", (e) => {
@@ -1141,11 +1110,7 @@ async function main() {
                 inv = translate4(inv, 0, 0, -0.1);
             }
         }
-        if (activeKeys.includes("ArrowLeft"))
-            inv = translate4(inv, -0.03, 0, 0);
-        //
-        if (activeKeys.includes("ArrowRight"))
-            inv = translate4(inv, 0.03, 0, 0);
+        // Arrow keys reserved for frame control, not camera movement
         // inv = rotate4(inv, 0.01, 0, 1, 0);
         if (activeKeys.includes("KeyA")) {
             inv = translate4(inv, -0.03, 0, 0); // Left
@@ -1163,7 +1128,8 @@ async function main() {
         }
 
         const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-        let isJumping = activeKeys.includes("Space");
+        // Space key reserved for animation control, not jumping
+        let isJumping = false;
         for (let gamepad of gamepads) {
             if (!gamepad) continue;
 
@@ -1306,26 +1272,31 @@ async function main() {
         } else {
             document.getElementById("progress").style.display = "none";
         }
-        fps.innerText = Math.round(avgFps) + " fps";
+        if (mfullyloaded)
+            fps.innerText = Math.round(avgFps) + " fps";
+        else
+            fps.innerText = "Loading " + mframe + "/" + mNumFrames;
         if (isNaN(currentCameraIndex)) {
             camid.innerText = "";
         }
         
-        // Sequence timing logic - single timing system
-        if (isPlayingSequence && sequenceFiles.length > 0) {
-            const frameInterval = 1000 / sequenceFrameRate;
-            if (now - lastFrameTime >= frameInterval) {
-                advance_frame();
-                lastFrameTime = now;
-                
-                // Update info to show sequence progress
-                camid.innerText = `seq ${mframe}/${mNumFrames} (${sequenceFrameRate}fps)`;
-            }
+        // Animation timing logic (from reference implementation)
+        if (mfirstframe) {
+            mfirstframe = false;
+            advance_frame();
         }
         
-        // Initialize timing on first frame
-        if (lastFrameTime === 0 && sequenceFiles.length > 0) {
-            lastFrameTime = now;
+        if (mfullyloaded) {
+            if ((now - lastmFrame) > mframerate && playMovie) {
+                advance_frame();
+                lastmFrame = now;
+            }
+        } else {
+            if (texCache[mframe - 1] == null || texCache[mframe - 1] == 0) {
+                // waiting for frame
+            } else {
+                advance_frame();
+            }
         }
         
         lastFrame = now;
