@@ -599,9 +599,7 @@ let defaultViewMatrix = [
     0.47, 0.04, 0.88, 0, -0.11, 0.99, 0.02, 0, -0.88, -0.11, 0.47, 0, 0.07,
     0.03, 6.55, 1,
 ];
-// Rotate camera 180 degrees around Y-axis to view from opposite side
-let rotatedViewMatrix = rotate4(defaultViewMatrix, Math.PI, 0, 1, 0);
-let viewMatrix = rotatedViewMatrix;
+let viewMatrix = defaultViewMatrix;
 async function main() {
     let carousel = false;
     let vertexCount = 0;
