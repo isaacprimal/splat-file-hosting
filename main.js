@@ -632,10 +632,7 @@ async function main(sceneConfig) {
             console.log("Applied viewMatrix from scene.json");
         }
         
-        if ("framerate" in sceneConfig) {
-            mframerate = 1000.0 / sceneConfig.framerate;
-            console.log("Set framerate to", sceneConfig.framerate, "fps");
-        }
+
         
         if ("numFrames" in sceneConfig) {
             mNumFrames = sceneConfig.numFrames;
