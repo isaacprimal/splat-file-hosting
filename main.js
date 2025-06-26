@@ -224,10 +224,10 @@ function createWorker(self) {
         // should have been the native format as it'd be very easy to
         // load it into webgl.
         for (let i = 0; i < vertexCount; i++) {
-            // x, y, z
-            texdata_f[8 * i + 0] = f_buffer[8 * i + 0];
-            texdata_f[8 * i + 1] = f_buffer[8 * i + 1];
-            texdata_f[8 * i + 2] = f_buffer[8 * i + 2];
+            // x, y, z - Apply 180 degree Y-axis rotation to asset
+            texdata_f[8 * i + 0] = -f_buffer[8 * i + 0]; // X becomes -X
+            texdata_f[8 * i + 1] = f_buffer[8 * i + 1];  // Y stays Y
+            texdata_f[8 * i + 2] = -f_buffer[8 * i + 2]; // Z becomes -Z
 
             // r, g, b, a
             texdata_c[4 * (8 * i + 7) + 0] = u_buffer[32 * i + 24 + 0];
@@ -600,50 +600,9 @@ let defaultViewMatrix = [
     0.03, 6.55, 1,
 ];
 let viewMatrix = defaultViewMatrix;
-
-async function loadConfig() {
-    try {
-        const response = await fetch("splats/scene.json");
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching scene.json:', error);
-        return null;
-    }
-}
-
-async function main(sceneConfig) {
+async function main() {
     let carousel = false;
     let vertexCount = 0;
-    
-    // Apply scene.json configuration
-    if (sceneConfig) {
-        console.log("Loading scene configuration:", sceneConfig);
-        
-        if ("viewMatrix" in sceneConfig) {
-            viewMatrix = sceneConfig.viewMatrix;
-            if (viewMatrix.length != 16) {
-                console.error('viewMatrix must have 16 elements');
-                return;
-            }
-            console.log("Applied viewMatrix from scene.json");
-        }
-        
-
-        
-        if ("numFrames" in sceneConfig) {
-            mNumFrames = sceneConfig.numFrames;
-            console.log("Set numFrames to", mNumFrames);
-        }
-        
-        if ("carouselOnLoad" in sceneConfig) {
-            carousel = sceneConfig.carouselOnLoad;
-            console.log("Set carousel to", carousel);
-        }
-    }
     
         // Animation variables (following reference implementation)
     let mframe = 1;
@@ -658,18 +617,10 @@ async function main(sceneConfig) {
 
     
     const params = new URLSearchParams(location.search);
-    // Only override viewMatrix if there's actually a hash
-    if (location.hash && location.hash.length > 1) {
-        try {
-            viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
-            carousel = false;
-            console.log("Applied viewMatrix from URL hash (overriding scene.json)");
-        } catch (err) {
-            console.log("Invalid hash, keeping scene.json viewMatrix");
-        }
-    } else {
-        console.log("No URL hash found, keeping scene.json viewMatrix");
-    }
+    try {
+        viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+        carousel = false;
+    } catch (err) {}
     
     // Initialize animation cache
     texCache = new Array(mNumFrames).fill(null);
@@ -1403,9 +1354,7 @@ async function main(sceneConfig) {
 
 }
 
-loadConfig().then(data => {
-    main(data).catch((err) => {
-        document.getElementById("spinner").style.display = "none";
-        document.getElementById("message").innerText = err.toString();
-    });
+main().catch((err) => {
+    document.getElementById("spinner").style.display = "none";
+    document.getElementById("message").innerText = err.toString();
 });
