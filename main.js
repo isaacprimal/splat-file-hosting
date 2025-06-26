@@ -661,10 +661,18 @@ async function main(sceneConfig) {
 
     
     const params = new URLSearchParams(location.search);
-    try {
-        viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
-        carousel = false;
-    } catch (err) {}
+    // Only override viewMatrix if there's actually a hash
+    if (location.hash && location.hash.length > 1) {
+        try {
+            viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+            carousel = false;
+            console.log("Applied viewMatrix from URL hash (overriding scene.json)");
+        } catch (err) {
+            console.log("Invalid hash, keeping scene.json viewMatrix");
+        }
+    } else {
+        console.log("No URL hash found, keeping scene.json viewMatrix");
+    }
     
     // Initialize animation cache
     texCache = new Array(mNumFrames).fill(null);
